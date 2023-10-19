@@ -98,5 +98,17 @@ public class DirectorRepositoryImpl implements DirectorRepository {
             throw new SQLStatmentException("SQL: " + SQL);
         }
     }
+
+    @Override
+    public void update(Director director) {
+        final String SQL = "UPDATE director SET name = ?, birthYear = ?, deathYear = ? WHERE id = ?";
+        List<Object> params = new ArrayList<>();
+        params.add(director.getName());
+        params.add(director.getBirthYear());
+        params.add(director.getDeathYear());
+        params.add(director.getId());
+        Connection connection = DBUtil.open();
+        DBUtil.update(connection, SQL, params);
+    }
 }
 

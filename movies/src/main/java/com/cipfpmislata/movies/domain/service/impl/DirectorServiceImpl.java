@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.cipfpmislata.movies.domain.entity.Director;
 import com.cipfpmislata.movies.domain.service.DirectorService;
+import com.cipfpmislata.movies.exception.ResourceNotFoundException;
 import com.cipfpmislata.movies.persistence.DirectorRepository;
 
 @Service
@@ -34,5 +35,11 @@ public class DirectorServiceImpl implements DirectorService {
     @Override
     public int getTotalNumberOfRecords(){
         return directorRepository.getTotalNumberOfRecords();
+    }
+
+    @Override
+    public void update(Director director){
+        Director existingDirector = directorRepository.findDirectorById(director.getId()).orElseThrow(() -> new ResourceNotFoundException("Director no encontrado con id: " + director.getId()));
+        directorRepository.update(director);
     }
 }

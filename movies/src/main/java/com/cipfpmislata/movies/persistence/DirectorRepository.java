@@ -10,4 +10,5 @@ public interface DirectorRepository {
     Director findDirectorById(int id);
     int insert(Director director);
     int getTotalNumberOfRecords();
+    public void update(Director director);
 }
