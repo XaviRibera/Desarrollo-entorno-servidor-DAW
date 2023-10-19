@@ -66,21 +66,22 @@ public class DirectorRepositoryImpl implements DirectorRepository {
     }
 
     @Override
-    public void insert(Director director) {
+    public int insert(Director director) {
         final String SQL = "INSERT INTO directors (name, birthYear, deathYear) VALUES (?, ?, ?)";
         List<Object> params = new ArrayList<>();
         params.add(director.getName());
         params.add(director.getBirthYear());
         params.add(director.getDeathYear());
         try (Connection connection = DBUtil.open()){
-            DBUtil.insert(connection, SQL, params);
+            int id = DBUtil.insert(connection, SQL, params);
             DBUtil.close(connection);
+            return id;
         } catch (DBConnectionException e) {
             throw e;
         } catch (SQLException e) {
             throw new SQLStatmentException("SQL: " + SQL);
         } catch (Exception e) {
-            System.out.println("Exception: " + e);
+            throw e;
         }
     }
 

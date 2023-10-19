@@ -12,6 +12,10 @@ public class Director {
     int birthYear;
     int deathYear;
 
+    public Director(){
+        
+    }
+
     public Director(int id, String name, int birthYear, int deathYear) {
         this.id = id;
         this.name = name;

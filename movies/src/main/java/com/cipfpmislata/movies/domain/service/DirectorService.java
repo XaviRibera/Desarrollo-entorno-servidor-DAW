@@ -8,6 +8,6 @@ import com.cipfpmislata.movies.domain.entity.Director;
 public interface DirectorService {
     List<Director> getAll(Optional<Integer> page, Optional<Integer> page_size);
     Director findByDirectorId(int id);
-    void insert(Director director);
+    int insert(Director director);
     int getTotalNumberOfRecords();
 }

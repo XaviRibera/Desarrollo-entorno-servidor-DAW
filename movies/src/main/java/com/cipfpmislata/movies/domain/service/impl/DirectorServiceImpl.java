@@ -27,8 +27,8 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
-    public void insert(Director director){
-        directorRepository.insert(director);
+    public int insert(Director director){
+        return directorRepository.insert(director);
     }
 
     @Override
