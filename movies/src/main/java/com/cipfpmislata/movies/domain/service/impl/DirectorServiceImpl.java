@@ -23,7 +23,7 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
-    public Director findByDirectorId(int id){
+    public Optional<Director> findByDirectorId(int id){
         return directorRepository.findDirectorById(id);
     }
 
@@ -39,7 +39,13 @@ public class DirectorServiceImpl implements DirectorService {
 
     @Override
     public void update(Director director){
-        Director existingDirector = directorRepository.findDirectorById(director.getId()).orElseThrow(() -> new ResourceNotFoundException("Director no encontrado con id: " + director.getId()));
+        directorRepository.findDirectorById(director.getId()).orElseThrow(() -> new ResourceNotFoundException("Director no encontrado con id: " + director.getId()));
         directorRepository.update(director);
+    }
+
+    @Override
+    public void delete(int id) {
+        directorRepository.findDirectorById(id).orElseThrow(() -> new ResourceNotFoundException("Director no encontrado con id: " + id));
+        directorRepository.delete(id);
     }
 }

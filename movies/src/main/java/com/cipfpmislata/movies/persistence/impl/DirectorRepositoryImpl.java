@@ -46,16 +46,18 @@ public class DirectorRepositoryImpl implements DirectorRepository {
     }
 
     @Override
-    public Director findDirectorById(int id){
+    public Optional<Director> findDirectorById(int id){
         final String SQL = "SELECT * FROM directors WHERE id = ?";
         try(Connection connection = DBUtil.open()){
             ResultSet resultSet = DBUtil.select(connection,SQL,List.of(id));
             if(resultSet.next()){
-                return new Director(
+                return Optional.of(
+                        new Director(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getInt("birthYear"),
                         resultSet.getInt("deathYear")
+                )
                 );
             }else{
                 return null;
@@ -101,7 +103,7 @@ public class DirectorRepositoryImpl implements DirectorRepository {
 
     @Override
     public void update(Director director) {
-        final String SQL = "UPDATE director SET name = ?, birthYear = ?, deathYear = ? WHERE id = ?";
+        final String SQL = "UPDATE directors SET name = ?, birthYear = ?, deathYear = ? WHERE id = ?";
         List<Object> params = new ArrayList<>();
         params.add(director.getName());
         params.add(director.getBirthYear());
@@ -109,6 +111,13 @@ public class DirectorRepositoryImpl implements DirectorRepository {
         params.add(director.getId());
         Connection connection = DBUtil.open();
         DBUtil.update(connection, SQL, params);
+    }
+
+    @Override
+    public void delete(int id) {
+        final String SQL = "DELETE FROM directors WHERE id = ?";
+        Connection connection = DBUtil.open();
+        DBUtil.delete(connection, SQL, List.of(id));
     }
 }
 

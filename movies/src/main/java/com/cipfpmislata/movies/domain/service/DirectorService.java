@@ -7,8 +7,9 @@ import com.cipfpmislata.movies.domain.entity.Director;
 
 public interface DirectorService {
     List<Director> getAll(Optional<Integer> page, Optional<Integer> page_size);
-    Director findByDirectorId(int id);
+    Optional<Director> findByDirectorId(int id);
     int insert(Director director);
     int getTotalNumberOfRecords();
     public void update(Director director);
+    public void delete(int id);
 }
