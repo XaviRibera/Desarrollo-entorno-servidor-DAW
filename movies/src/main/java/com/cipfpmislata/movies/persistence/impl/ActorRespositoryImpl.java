@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -41,16 +42,18 @@ public class ActorRespositoryImpl implements ActorRepository {
     }
 
     @Override
-    public Actor findActorById(int id){
+    public Optional<Actor> findActorById(int id){
         final String SQL = "SELECT * FROM actors WHERE id = ?";
         try(Connection connection = DBUtil.open()){
             ResultSet resultSet = DBUtil.select(connection,SQL,List.of(id));
             if(resultSet.next()){
-                return new Actor(
+                return Optional.of(
+                        new Actor(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getInt("birthYear"),
                         resultSet.getInt("deathYear")
+                        )
                 );
             }else{
                 return null;
@@ -77,5 +80,38 @@ public class ActorRespositoryImpl implements ActorRepository {
         } catch (Exception e) {
             System.out.println("Exception: " + e);
         }
+    }
+
+    @Override
+    public int getTotalNumberOfRecords(){
+        final String SQL = "SELECT COUNT(*) FROM actors";
+        try (Connection connection = DBUtil.open()){
+            ResultSet resultSet = DBUtil.select(connection, SQL, null);
+            resultSet.next();
+            return (int) resultSet.getInt(1);
+        }catch (DBConnectionException e) {
+            throw e;
+        } catch (SQLException e) {
+            throw new SQLStatmentException("SQL: " + SQL);
+        }
+    }
+
+    @Override
+    public void update(Actor actor) {
+        final String SQL = "UPDATE actors SET name = ?, birthYear = ?, deathYear = ? WHERE id = ?";
+        List<Object> params = new ArrayList<>();
+        params.add(actor.getName());
+        params.add(actor.getBirthYear());
+        params.add(actor.getDeathYear());
+        params.add(actor.getId());
+        Connection connection = DBUtil.open();
+        DBUtil.update(connection, SQL, params);
+    }
+
+    @Override
+    public void delete(int id) {
+        final String SQL = "DELETE FROM actors WHERE id = ?";
+        Connection connection = DBUtil.open();
+        DBUtil.delete(connection, SQL, List.of(id));
     }
 }
