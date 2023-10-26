@@ -1,5 +1,6 @@
 package com.cipfpmislata.movies.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cipfpmislata.movies.controller.model.director.DirectorListWeb;
 import com.cipfpmislata.movies.domain.entity.Director;
 import com.cipfpmislata.movies.domain.service.DirectorService;
 import com.cipfpmislata.movies.http_response.Response;
+import com.cipfpmislata.movies.mapper.director.DirectorMapper;
 
 @RequestMapping("/directors")
 @RestController
@@ -35,7 +38,12 @@ public class DirectorController {
         int limit = (pageSize.isPresent())? pageSize.get(): LIMIT;
         int totalRecords = directorService.getTotalNumberOfRecords();
 
-        Response response = new Response(directorService.getAll(page, Optional.of(limit)), totalRecords, page, limit);
+        List<Director> directors = directorService.getAll(pageSize, page);
+        List<DirectorListWeb> directorWeb = directors.stream()
+                    .map(director -> DirectorMapper.mapper.toDirectorListWeb(director))
+                    .toList();
+
+        Response response = new Response(directorWeb, totalRecords, page, limit);
 
         return response;
     }
