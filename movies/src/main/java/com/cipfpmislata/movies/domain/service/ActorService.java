@@ -8,6 +8,7 @@ import com.cipfpmislata.movies.domain.entity.Actor;
 public interface ActorService {
     public List<Actor> getAll();
     public Optional<Actor> findByActorId(int id);
+    int getTotalNumberOfRecords();
     public void insert(Actor actor);
     public void update(Actor actor);
     public void delete(int id);

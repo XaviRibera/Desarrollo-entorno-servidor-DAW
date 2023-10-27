@@ -33,6 +33,11 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
+    public int getTotalNumberOfRecords(){
+        return actorRepository.getTotalNumberOfRecords();
+    }
+
+    @Override
     public void update(Actor actor){
         actorRepository.findActorById(actor.getId()).orElseThrow(() -> new ResourceNotFoundException("Director no encontrado con id: " + actor.getId()));
         actorRepository.update(actor);

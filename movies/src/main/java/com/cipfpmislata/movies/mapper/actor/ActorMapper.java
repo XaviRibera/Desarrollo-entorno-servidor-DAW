@@ -1,14 +1,19 @@
 package com.cipfpmislata.movies.mapper.actor;
 
+import java.util.Optional;
+
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.cipfpmislata.movies.controller.model.actor.ActorDetailWeb;
+import com.cipfpmislata.movies.controller.model.actor.ActorListWeb;
 import com.cipfpmislata.movies.domain.entity.Actor;
-import com.cipfpmislata.movies.mapper.movie.MovieMapper;
 
+@Mapper(componentModel = "spring")
 public interface ActorMapper {
     
-    MovieMapper mapper = Mappers.getMapper(MovieMapper.class);
+    ActorMapper mapper = Mappers.getMapper(ActorMapper.class);
 
-    ActorDetailWeb toActorListWeb(Actor actor);
+    ActorDetailWeb toActorDetailWeb(Optional<Actor> actor);
+    ActorListWeb toActorListWeb(Actor actor);
 }

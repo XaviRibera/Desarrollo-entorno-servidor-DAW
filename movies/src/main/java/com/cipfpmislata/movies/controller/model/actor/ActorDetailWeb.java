@@ -14,4 +14,6 @@ public class ActorDetailWeb {
  
     private int id;
     private String name;
+    private int birthYear;
+    private int deathYear;
 }

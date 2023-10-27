@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cipfpmislata.movies.controller.model.director.DirectorDetailWeb;
 import com.cipfpmislata.movies.controller.model.director.DirectorListWeb;
 import com.cipfpmislata.movies.domain.entity.Director;
 import com.cipfpmislata.movies.domain.service.DirectorService;
@@ -43,20 +44,12 @@ public class DirectorController {
                     .map(director -> DirectorMapper.mapper.toDirectorListWeb(director))
                     .toList();
 
-        Response response = new Response(directorWeb, totalRecords, page, limit);
-
-        return response;
+        return new Response(directorWeb, totalRecords, page, limit);
     }
 
     @GetMapping("/{id}")
-    public Optional<Director> find(@PathVariable("id") int id) {
-        try {
-            System.out.println(directorService.findByDirectorId(id));
-            return directorService.findByDirectorId(id);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw e;
-        }
+    public DirectorDetailWeb find(@PathVariable("id") int id) {
+        return  DirectorMapper.mapper.toDirectorDetailWeb(directorService.findByDirectorId(id));
     }
 
     
