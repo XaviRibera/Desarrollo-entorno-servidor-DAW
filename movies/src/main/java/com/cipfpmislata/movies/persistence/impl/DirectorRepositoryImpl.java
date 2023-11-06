@@ -57,13 +57,13 @@ public class DirectorRepositoryImpl implements DirectorRepository {
                         resultSet.getString("name"),
                         resultSet.getInt("birthYear"),
                         resultSet.getInt("deathYear")
-                )
+                    )
                 );
             }else{
-                return null;
+                return Optional.empty();
             }
         } catch (SQLException e){
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 

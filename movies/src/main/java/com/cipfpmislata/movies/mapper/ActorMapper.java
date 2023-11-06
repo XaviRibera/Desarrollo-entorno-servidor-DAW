@@ -1,7 +1,5 @@
 package com.cipfpmislata.movies.mapper;
 
-import java.util.Optional;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
