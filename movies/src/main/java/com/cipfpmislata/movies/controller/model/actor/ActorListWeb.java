@@ -13,6 +13,6 @@ import lombok.Setter;
 public class ActorListWeb {
  
     private int id;
-    private String title;
+    private String tittle;
  
 }

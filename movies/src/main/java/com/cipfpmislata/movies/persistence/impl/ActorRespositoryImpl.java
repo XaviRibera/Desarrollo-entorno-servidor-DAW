@@ -55,8 +55,8 @@ public class ActorRespositoryImpl implements ActorRepository {
                         resultSet.getInt("deathYear")
                         )
                 );
-            }else{
-                return null;
+            }else {
+                return Optional.empty();
             }
         } catch (SQLException e){
             throw new RuntimeException();

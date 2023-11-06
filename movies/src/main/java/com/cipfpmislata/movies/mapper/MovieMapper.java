@@ -1,4 +1,4 @@
-package com.cipfpmislata.movies.mapper.movie;
+package com.cipfpmislata.movies.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

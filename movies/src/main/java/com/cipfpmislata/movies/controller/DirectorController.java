@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cipfpmislata.movies.controller.model.director.DirectorCreateWeb;
 import com.cipfpmislata.movies.controller.model.director.DirectorDetailWeb;
 import com.cipfpmislata.movies.controller.model.director.DirectorListWeb;
 import com.cipfpmislata.movies.domain.entity.Director;
 import com.cipfpmislata.movies.domain.service.DirectorService;
 import com.cipfpmislata.movies.http_response.Response;
-import com.cipfpmislata.movies.mapper.director.DirectorMapper;
+import com.cipfpmislata.movies.mapper.DirectorMapper;
 
 @RequestMapping("/directors")
 @RestController
@@ -55,10 +56,16 @@ public class DirectorController {
     
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    public Director insert(@RequestBody Director director){
-        int id = directorService.insert(director);
-        director.setId(id);
-        return director;
+    public Response insert(@RequestBody DirectorCreateWeb directorCreateWeb){
+        int id = directorService.insert(DirectorMapper.mapper.toDirector(directorCreateWeb));
+        DirectorDetailWeb directorDetailWeb = new DirectorDetailWeb(
+            id,
+            directorCreateWeb.getName(),
+            directorCreateWeb.getBirthYear(),
+            directorCreateWeb.getDeathYear()
+    );
+    
+        return new Response(directorCreateWeb, id, null, id);
     }
     
     

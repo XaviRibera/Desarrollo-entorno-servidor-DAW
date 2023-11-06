@@ -2,7 +2,7 @@ package com.cipfpmislata.movies.controller;
 
 import com.cipfpmislata.movies.domain.service.MovieService;
 import com.cipfpmislata.movies.http_response.Response;
-import com.cipfpmislata.movies.mapper.movie.MovieMapper;
+import com.cipfpmislata.movies.mapper.MovieMapper;
 import com.cipfpmislata.movies.domain.entity.Movie;
 import com.cipfpmislata.movies.controller.model.movie.MovieDetailWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieListWeb;

@@ -56,7 +56,7 @@ public class DirectorRepositoryImpl implements DirectorRepository {
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getInt("birthYear"),
-                        (resultSet.getObject("deathYear") != null)? resultSet.getInt("deathYear") : null
+                        resultSet.getInt("deathYear")
                 )
                 );
             }else{

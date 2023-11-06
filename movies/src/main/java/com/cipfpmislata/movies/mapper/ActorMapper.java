@@ -1,4 +1,4 @@
-package com.cipfpmislata.movies.mapper.actor;
+package com.cipfpmislata.movies.mapper;
 
 import java.util.Optional;
 
@@ -14,6 +14,6 @@ public interface ActorMapper {
     
     ActorMapper mapper = Mappers.getMapper(ActorMapper.class);
 
-    ActorDetailWeb toActorDetailWeb(Optional<Actor> actor);
+    ActorDetailWeb toActorDetailWeb(Actor actor);
     ActorListWeb toActorListWeb(Actor actor);
 }

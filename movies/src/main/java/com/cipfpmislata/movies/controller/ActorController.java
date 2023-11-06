@@ -20,7 +20,7 @@ import com.cipfpmislata.movies.controller.model.actor.ActorListWeb;
 import com.cipfpmislata.movies.domain.entity.Actor;
 import com.cipfpmislata.movies.domain.service.ActorService;
 import com.cipfpmislata.movies.http_response.Response;
-import com.cipfpmislata.movies.mapper.actor.ActorMapper;
+import com.cipfpmislata.movies.mapper.ActorMapper;
 
 @RequestMapping("/actors")
 @RestController
