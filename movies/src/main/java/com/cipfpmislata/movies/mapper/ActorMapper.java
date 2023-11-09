@@ -16,12 +16,7 @@ import com.cipfpmislata.movies.domain.entity.Actor;
 public interface ActorMapper {
     
     ActorMapper mapper = Mappers.getMapper(ActorMapper.class);
-
-    @Mapping(target = "id", expression = "java(resultSet.getInt(\"id\"))")
-    @Mapping(target = "name", expression = "java(resultSet.getString(\"name\"))")
-    @Mapping(target = "birthYear", expression = "java(resultSet.getInt(\"birthYear\"))")
-    @Mapping(target = "deathYear", expression = "java(resultSet.getInt(\"deathYear\"))")
     
-    ActorDetailWeb toActorDetailWeb(Optional<Actor> optional);
+    ActorDetailWeb toActorDetailWeb(Actor actor);
     ActorListWeb toActorListWeb(Actor actor);
 }

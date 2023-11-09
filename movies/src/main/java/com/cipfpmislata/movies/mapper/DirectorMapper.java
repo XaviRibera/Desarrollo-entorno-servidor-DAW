@@ -16,7 +16,7 @@ public interface DirectorMapper {
     
     DirectorMapper mapper = Mappers.getMapper(DirectorMapper.class);
 
-    DirectorDetailWeb toDirectorDetailWeb(Optional<Director>director);
+    DirectorDetailWeb toDirectorDetailWeb(Director director);
     DirectorListWeb toDirectorListWeb(Director director);
     Director toDirector(DirectorCreateWeb directorCreateWeb);
     Director toDirector(DirectorUpdateWeb directorUpdateWeb);

@@ -23,8 +23,8 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public Optional<Actor> findByActorId(int id){
-        return actorRepository.findActorById(id);
+    public Actor findByActorId(int id){
+        return actorRepository.findActorById(id).orElseThrow(() -> new ResourceNotFoundException("Director no encontrado con id: " + id));
     }
 
     @Override

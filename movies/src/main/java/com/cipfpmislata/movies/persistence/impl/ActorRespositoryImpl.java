@@ -40,7 +40,6 @@ public class ActorRespositoryImpl implements ActorRepository {
                         )
                 );
             }
-            DBUtil.close(connection);
             return actors;
         } catch (SQLException e) {
             throw new RuntimeException();

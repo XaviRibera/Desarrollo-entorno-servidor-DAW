@@ -1,7 +1,6 @@
 package com.cipfpmislata.movies.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +21,6 @@ import com.cipfpmislata.movies.domain.entity.Actor;
 import com.cipfpmislata.movies.domain.service.ActorService;
 import com.cipfpmislata.movies.http_response.Response;
 import com.cipfpmislata.movies.mapper.ActorMapper;
-import com.cipfpmislata.movies.mapper.DirectorMapper;
 
 @RequestMapping("/actors")
 @RestController
@@ -35,7 +33,7 @@ public class ActorController {
     private int LIMIT;
 
     @GetMapping("")
-    public Response getAll(@RequestParam Integer page, @RequestParam Integer pageSize){
+    public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize){
         pageSize = (pageSize != null)? pageSize: LIMIT;
         int totalRecords = actorService.getTotalNumberOfRecords();
 

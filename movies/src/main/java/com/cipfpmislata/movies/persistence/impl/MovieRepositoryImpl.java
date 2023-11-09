@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -43,7 +42,6 @@ public class MovieRepositoryImpl implements MovieRepository {
                                 )
                             );
                         }
-                        DBUtil.close(connection);
                         return movies;
                     } catch (DBConnectionException e) {
                         throw e;
