@@ -32,16 +32,16 @@ public class MovieController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
-    public Response getAll(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> pageSize) {
-        int limit = (pageSize.isPresent())? pageSize.get(): LIMIT;
+    public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+        pageSize = (pageSize != null)? pageSize : LIMIT;
         int totalRecords = movieService.getTotalNumberOfRecords();
 
-        List<Movie> movies =movieService.getAll(page,pageSize);
+        List<Movie> movies = (page != null)?movieService.getAll(page, pageSize) : movieService.getAll(null,null);
         List<MovieListWeb> movieWeb = movies.stream()
                 .map(movie -> MovieMapper.mapper.toMovieListWeb(movie))
                 .toList();
 
-        Response response = new Response(movieWeb, totalRecords, page, limit);
+        Response response = new Response(movieWeb, totalRecords, page, pageSize);
 
         return response;
     }

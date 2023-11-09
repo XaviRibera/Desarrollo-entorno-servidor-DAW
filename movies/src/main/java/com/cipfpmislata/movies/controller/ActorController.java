@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cipfpmislata.movies.controller.model.actor.ActorDetailWeb;
 import com.cipfpmislata.movies.controller.model.actor.ActorListWeb;
 import com.cipfpmislata.movies.domain.entity.Actor;
 import com.cipfpmislata.movies.domain.service.ActorService;
 import com.cipfpmislata.movies.http_response.Response;
 import com.cipfpmislata.movies.mapper.ActorMapper;
+import com.cipfpmislata.movies.mapper.DirectorMapper;
 
 @RequestMapping("/actors")
 @RestController
@@ -33,27 +35,21 @@ public class ActorController {
     private int LIMIT;
 
     @GetMapping("")
-    public Response getAll(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> pageSize){
-        int limit = (pageSize.isPresent())? pageSize.get(): LIMIT;
+    public Response getAll(@RequestParam Integer page, @RequestParam Integer pageSize){
+        pageSize = (pageSize != null)? pageSize: LIMIT;
         int totalRecords = actorService.getTotalNumberOfRecords();
 
-        List<Actor> actors = actorService.getAll();
+        List<Actor> actors = (page != null) ? actorService.getAll(page, pageSize) : actorService.getAll(null, null);
         List<ActorListWeb> actorWeb = actors.stream()
                     .map(actor -> ActorMapper.mapper.toActorListWeb(actor))
                     .toList();
 
-        return new Response(actorWeb, totalRecords, page, limit);
+        return new Response(actorWeb, totalRecords, page, pageSize);
     }
 
     @GetMapping("/{id}")
-    public Optional<Actor> find(@PathVariable("id") int id) {
-        try {
-            System.out.println(actorService.findByActorId(id));
-            return actorService.findByActorId(id);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw e;
-        }
+    public ActorDetailWeb find(@PathVariable("id") int id) {
+        return  ActorMapper.mapper.toActorDetailWeb(actorService.findByActorId(id));
     }
 
     @GetMapping("/insert")

@@ -18,8 +18,8 @@ public class ActorServiceImpl implements ActorService {
     private ActorRepository actorRepository;
 
     @Override
-    public List<Actor> getAll(){
-        return actorRepository.getAll();
+    public List<Actor> getAll(Integer page, Integer pageSize){
+        return actorRepository.getAll(page,pageSize);
     }
 
     @Override

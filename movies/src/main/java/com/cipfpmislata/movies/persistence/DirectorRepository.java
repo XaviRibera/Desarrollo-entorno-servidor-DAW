@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.cipfpmislata.movies.domain.entity.Director;
 
 public interface DirectorRepository {
-    List<Director> getAll(Optional<Integer> page, Optional<Integer> page_size);
+    List<Director> getAll(Integer page, Integer page_size);
     Optional<Director> findDirectorById(int id);
     int insert(Director director);
     int getTotalNumberOfRecords();

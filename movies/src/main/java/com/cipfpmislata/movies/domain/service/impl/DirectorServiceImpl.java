@@ -18,7 +18,7 @@ public class DirectorServiceImpl implements DirectorService {
     private DirectorRepository directorRepository;
 
     @Override
-    public List<Director> getAll(Optional<Integer> page, Optional<Integer> page_size){
+    public List<Director> getAll(Integer page, Integer page_size){
         return directorRepository.getAll(page, page_size);
     }
 

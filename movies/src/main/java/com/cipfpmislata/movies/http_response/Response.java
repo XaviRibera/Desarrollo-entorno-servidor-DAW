@@ -29,11 +29,11 @@ public class Response {
     private String next;
     private String previous;
 
-    public Response(Object data, int totalRecords, Optional<Integer> page, int pageSize) { 
+    public Response(Object data, int totalRecords, Integer page, int pageSize) { 
         this.data = data;
         this.totalRecords = totalRecords;
-        if(page.isPresent())
-            buildPaginationMetaData(totalRecords, pageSize, page.get());
+        if(page != null)
+            buildPaginationMetaData(totalRecords, pageSize, page);
     }
 
     private void buildPaginationMetaData(int totalRecords, int pageSize, int page) {

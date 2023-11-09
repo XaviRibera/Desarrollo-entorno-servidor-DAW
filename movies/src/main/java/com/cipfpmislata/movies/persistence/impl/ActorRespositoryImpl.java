@@ -19,8 +19,14 @@ import com.cipfpmislata.movies.persistence.ActorRepository;
 public class ActorRespositoryImpl implements ActorRepository {
 
     @Override
-    public List<Actor> getAll(){
-        final String SQL = "SELECT * FROM actors";
+    public List<Actor> getAll(Integer page, Integer pageSize){
+        String SQL = "SELECT * FROM actors";
+        if(page != null){
+            int limit = pageSize;
+            int offset = (page-1) * limit;
+            SQL += String.format(" LIMIT %d, %d", offset, limit);
+        };
+
         List<Actor> actors = new ArrayList<>();
         try (Connection connection = DBUtil.open()){
             ResultSet resultSet = DBUtil.select(connection, SQL, null);

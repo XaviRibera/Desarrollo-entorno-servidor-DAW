@@ -20,11 +20,11 @@ public class MovieRepositoryImpl implements MovieRepository {
     
 
     @Override
-    public List<Movie> getAll(Optional<Integer> page, Optional<Integer> page_size) {
+    public List<Movie> getAll(Integer page, Integer pageSize) {
         String sql = "SELECT * FROM movies";
-        if(page.isPresent()) {
-            int limit = page_size.get();
-            int offset = (page.get()-1) * limit;
+        if(page != null) {
+            int limit = pageSize;
+            int offset = (page-1) * limit;
             sql += String.format(" LIMIT %d, %d", offset, limit);
         }
         List<Movie> movies = new ArrayList<>();

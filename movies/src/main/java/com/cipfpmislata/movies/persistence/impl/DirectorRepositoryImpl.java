@@ -19,11 +19,11 @@ import com.cipfpmislata.movies.persistence.DirectorRepository;
 public class DirectorRepositoryImpl implements DirectorRepository {
 
     @Override
-    public List<Director> getAll(Optional<Integer> page, Optional<Integer> page_size){
+    public List<Director> getAll(Integer page, Integer page_size){
         String SQL = "SELECT * FROM directors";
-        if(page.isPresent()){
-            int limit = page_size.get();
-            int offset = (page.get()-1) * limit;
+        if(page != null){
+            int limit = page_size;
+            int offset = (page-1) * limit;
             SQL += String.format(" LIMIT %d, %d", offset, limit);
         }
         List<Director> directors = new ArrayList<>();

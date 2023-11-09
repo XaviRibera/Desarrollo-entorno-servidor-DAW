@@ -36,16 +36,16 @@ public class DirectorController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
-    public Response getAll(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> pageSize) {
-        int limit = (pageSize.isPresent())? pageSize.get(): LIMIT;
+    public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+        pageSize = (pageSize != null)? pageSize: LIMIT;
         int totalRecords = directorService.getTotalNumberOfRecords();
 
-        List<Director> directors = directorService.getAll(pageSize, page);
+        List<Director> directors = (page != null)?directorService.getAll(pageSize, page) : directorService.getAll(null, null);
         List<DirectorListWeb> directorWeb = directors.stream()
                     .map(director -> DirectorMapper.mapper.toDirectorListWeb(director))
                     .toList();
 
-        return new Response(directorWeb, totalRecords, page, limit);
+        return new Response(directorWeb, totalRecords, page, pageSize);
     }
 
     @GetMapping("/{id}")
