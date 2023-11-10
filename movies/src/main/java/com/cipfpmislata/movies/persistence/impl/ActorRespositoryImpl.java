@@ -7,49 +7,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.cipfpmislata.movies.db.DBUtil;
 import com.cipfpmislata.movies.db.exception.DBConnectionException;
 import com.cipfpmislata.movies.domain.entity.Actor;
+import com.cipfpmislata.movies.domain.entity.Director;
+import com.cipfpmislata.movies.domain.persistance.ActorRepository;
 import com.cipfpmislata.movies.exception.SQLStatmentException;
-import com.cipfpmislata.movies.persistence.ActorRepository;
+import com.cipfpmislata.movies.mapper.DirectorMapper;
+import com.cipfpmislata.movies.persistence.DAO.ActorDAO;
+import com.cipfpmislata.movies.persistence.model.ActorEntity;
+import com.cipfpmislata.movies.persistence.model.DirectorEntity;
 
 @Repository
 public class ActorRespositoryImpl implements ActorRepository {
 
+    @Autowired
+    ActorDAO actorDAO;
+
     @Override
     public List<Actor> getAll(Integer page, Integer pageSize){
-        String SQL = "SELECT * FROM actors";
-        if(page != null){
-            int limit = pageSize;
-            int offset = (page-1) * limit;
-            SQL += String.format(" LIMIT %d, %d", offset, limit);
-        };
-
-        List<Actor> actors = new ArrayList<>();
-        try (Connection connection = DBUtil.open()){
-            ResultSet resultSet = DBUtil.select(connection, SQL, null);
-            while (resultSet.next()) {
-                actors.add(
-                        new Actor(
-                                resultSet.getInt("id"),
-                                resultSet.getString("name"),
-                                resultSet.getInt("birthYear"),
-                                resultSet.getInt("deathYear")
-                        )
-                );
-            }
+        try(Connection connection = DBUtil.open(true)) {
+            List<ActorEntity> actorEntities = actorDAO.getAll(connection, page, pageSize);
+            List<Actor> actors = actorEntities.stream()
+                    .map(actorEntity -> ActorMapper.mapper.toActor(actorEntity))
+                    .toList();
             return actors;
+ 
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public Optional<Actor> findActorById(int id){
         final String SQL = "SELECT * FROM actors WHERE id = ?";
-        try(Connection connection = DBUtil.open()){
+        try(Connection connection = DBUtil.open(true)){
             ResultSet resultSet = DBUtil.select(connection,SQL,List.of(id));
             if(resultSet.next()){
                 return Optional.of(
@@ -57,7 +52,7 @@ public class ActorRespositoryImpl implements ActorRepository {
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getInt("birthYear"),
-                        resultSet.getInt("deathYear")
+                        (resultSet.getObject("deathYear") != null)? resultSet.getInt("deathYear") : null
                         )
                 );
             }else {
@@ -75,7 +70,7 @@ public class ActorRespositoryImpl implements ActorRepository {
         params.add(actor.getName());
         params.add(actor.getBirthYear());
         params.add(actor.getDeathYear());
-        try (Connection connection = DBUtil.open()){
+        try (Connection connection = DBUtil.open(true)){
             DBUtil.insert(connection, SQL, params);
             DBUtil.close(connection);
         } catch (DBConnectionException e) {
@@ -90,7 +85,7 @@ public class ActorRespositoryImpl implements ActorRepository {
     @Override
     public int getTotalNumberOfRecords(){
         final String SQL = "SELECT COUNT(*) FROM actors";
-        try (Connection connection = DBUtil.open()){
+        try (Connection connection = DBUtil.open(true)){
             ResultSet resultSet = DBUtil.select(connection, SQL, null);
             resultSet.next();
             return (int) resultSet.getInt(1);
@@ -109,14 +104,14 @@ public class ActorRespositoryImpl implements ActorRepository {
         params.add(actor.getBirthYear());
         params.add(actor.getDeathYear());
         params.add(actor.getId());
-        Connection connection = DBUtil.open();
+        Connection connection = DBUtil.open(true);
         DBUtil.update(connection, SQL, params);
     }
 
     @Override
     public void delete(int id) {
         final String SQL = "DELETE FROM actors WHERE id = ?";
-        Connection connection = DBUtil.open();
+        Connection connection = DBUtil.open(true);
         DBUtil.delete(connection, SQL, List.of(id));
     }
 }

@@ -9,8 +9,6 @@ import lombok.Setter;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.Optional;
-
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL) // No incluirá atributos nulos en el JSON

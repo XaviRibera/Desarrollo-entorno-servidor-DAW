@@ -1,11 +1,11 @@
 package com.cipfpmislata.movies.domain.service.impl;
 
 import com.cipfpmislata.movies.domain.entity.Movie;
+import com.cipfpmislata.movies.domain.persistance.MovieRepository;
 import com.cipfpmislata.movies.domain.service.MovieService;
-import com.cipfpmislata.movies.persistence.MovieRepository;
+import com.cipfpmislata.movies.exception.ResourceNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,9 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie findByMovieId(int id){
-        return movieRepository.findByMovieId(id);
+        Movie movie = movieRepository.findByMovieId(id).orElseThrow(() -> new ResourceNotFoundException("Director no encontrado con id: " + id));
+        
+        return movie;
     }
 
     @Override

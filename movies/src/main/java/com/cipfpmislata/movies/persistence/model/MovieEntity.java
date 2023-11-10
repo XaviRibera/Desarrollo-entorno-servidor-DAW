@@ -1,19 +1,20 @@
-package com.cipfpmislata.movies.controller.model.movie;
+package com.cipfpmislata.movies.persistence.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class MovieDetailWeb {
+public class MovieEntity {
  
     private int id;
     private String title;
     private int year;
+    private String image;
     private int runtime;
+    private String description;
 }

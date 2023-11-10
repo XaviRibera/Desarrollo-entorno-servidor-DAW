@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cipfpmislata.movies.controller.model.director.DirectorCreateWeb;
 import com.cipfpmislata.movies.controller.model.director.DirectorDetailWeb;
 import com.cipfpmislata.movies.controller.model.director.DirectorListWeb;
+import com.cipfpmislata.movies.controller.model.director.DirectorUpdateWeb;
 import com.cipfpmislata.movies.domain.entity.Director;
 import com.cipfpmislata.movies.domain.service.DirectorService;
 import com.cipfpmislata.movies.http_response.Response;
@@ -65,15 +66,15 @@ public class DirectorController {
             directorCreateWeb.getDeathYear()
     );
     
-        return new Response(directorCreateWeb, id, null, id);
+        return new Response(directorDetailWeb, id, null, id);
     }
     
     
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
-    public void update(@PathVariable("id") int id, @RequestBody Director director) {
-        director.setId(id);
-        directorService.update(director);
+    public void update(@PathVariable("id") int id, @RequestBody DirectorUpdateWeb directorUpdateWeb) {
+        directorUpdateWeb.setId(id);
+        directorService.update(DirectorMapper.mapper.toDirector(directorUpdateWeb));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -1,4 +1,4 @@
-package com.cipfpmislata.movies.persistence;
+package com.cipfpmislata.movies.domain.persistance;
 
 import java.util.List;
 import java.util.Optional;

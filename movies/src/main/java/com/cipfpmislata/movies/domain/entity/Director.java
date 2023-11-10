@@ -1,29 +1,24 @@
 package com.cipfpmislata.movies.domain.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Director {
 
     int id;
     String name;
     int birthYear;
-    int deathYear;
+    Integer deathYear;
 
-    public Director(){
-        
-    }
-
-    public Director(int id, String name, int birthYear, int deathYear) {
-        this.id = id;
-        this.name = name;
-        this.birthYear = birthYear;
-        this.deathYear = deathYear;
-    }
-
-    public Director(String name, int birthYear, int deathYear) {
+    public Director(String name, int birthYear, Integer deathYear) {
         this.name = name;
         this.birthYear = birthYear;
         this.deathYear = deathYear;

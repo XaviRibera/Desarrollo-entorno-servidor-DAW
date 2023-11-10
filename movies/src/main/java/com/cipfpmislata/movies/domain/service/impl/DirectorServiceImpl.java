@@ -1,15 +1,14 @@
 package com.cipfpmislata.movies.domain.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cipfpmislata.movies.domain.entity.Director;
+import com.cipfpmislata.movies.domain.persistance.DirectorRepository;
 import com.cipfpmislata.movies.domain.service.DirectorService;
 import com.cipfpmislata.movies.exception.ResourceNotFoundException;
-import com.cipfpmislata.movies.persistence.DirectorRepository;
 
 @Service
 public class DirectorServiceImpl implements DirectorService {

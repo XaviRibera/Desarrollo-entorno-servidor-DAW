@@ -1,6 +1,4 @@
-package com.cipfpmislata.movies.controller.model.director;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
+package com.cipfpmislata.movies.persistence.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,14 +7,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class DirectorDetailWeb {
+@NoArgsConstructor
+public class ActorEntity {
  
     private int id;
     private String name;
     private int birthYear;
     private Integer deathYear;
- 
 }
