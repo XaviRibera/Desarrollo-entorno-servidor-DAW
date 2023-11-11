@@ -3,7 +3,6 @@ package com.cipfpmislata.movies.persistence.impl;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,14 +12,11 @@ import org.springframework.stereotype.Repository;
 import com.cipfpmislata.movies.db.DBUtil;
 import com.cipfpmislata.movies.db.exception.DBConnectionException;
 import com.cipfpmislata.movies.domain.entity.Actor;
-import com.cipfpmislata.movies.domain.entity.Director;
 import com.cipfpmislata.movies.domain.persistance.ActorRepository;
 import com.cipfpmislata.movies.exception.SQLStatmentException;
 import com.cipfpmislata.movies.mapper.ActorMapper;
-import com.cipfpmislata.movies.mapper.DirectorMapper;
 import com.cipfpmislata.movies.persistence.DAO.ActorDAO;
 import com.cipfpmislata.movies.persistence.model.ActorEntity;
-import com.cipfpmislata.movies.persistence.model.DirectorEntity;
 
 @Repository
 public class ActorRespositoryImpl implements ActorRepository {
@@ -95,4 +91,18 @@ public class ActorRespositoryImpl implements ActorRepository {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<Actor> findByMovieId(int movieId) {
+        try (Connection connection= DBUtil.open(true)){
+            List<ActorEntity> actorEntities = actorDAO.findByMovieId(connection, movieId);
+            List<Actor> actors = actorEntities.stream()
+                    .map(ActorMapper.mapper::toActor)
+                    .toList();
+            return actors;
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
+
 }

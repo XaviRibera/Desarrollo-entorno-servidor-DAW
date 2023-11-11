@@ -12,4 +12,5 @@ public interface ActorRepository {
     public int getTotalNumberOfRecords();
     public void update(Actor actor);
     public void delete(int id);
+    public List<Actor> findByMovieId(int movieId);
 }

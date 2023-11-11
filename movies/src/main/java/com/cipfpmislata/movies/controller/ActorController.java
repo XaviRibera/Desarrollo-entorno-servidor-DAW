@@ -18,13 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cipfpmislata.movies.controller.model.actor.ActorCreateWeb;
 import com.cipfpmislata.movies.controller.model.actor.ActorDetailWeb;
 import com.cipfpmislata.movies.controller.model.actor.ActorListWeb;
-import com.cipfpmislata.movies.controller.model.director.DirectorCreateWeb;
-import com.cipfpmislata.movies.controller.model.director.DirectorDetailWeb;
 import com.cipfpmislata.movies.domain.entity.Actor;
 import com.cipfpmislata.movies.domain.service.ActorService;
 import com.cipfpmislata.movies.http_response.Response;
 import com.cipfpmislata.movies.mapper.ActorMapper;
-import com.cipfpmislata.movies.mapper.DirectorMapper;
 
 @RequestMapping("/actors")
 @RestController

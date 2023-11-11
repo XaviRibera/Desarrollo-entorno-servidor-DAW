@@ -21,7 +21,7 @@ public class Movie {
     private int runtime;
     private String description;
     private Director director;
-    private List<Actor> actors;
+    private List<Character> characters;
 
     public Movie(int id, String title, int year, String image, int runtime, String description) {
         this.id = id;
