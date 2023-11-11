@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
 import com.cipfpmislata.movies.db.DBUtil;
 import com.cipfpmislata.movies.mapper.ActorMapper;
 import com.cipfpmislata.movies.persistence.model.ActorEntity;
 
+@Component
 public class ActorDAO {
     
     public List<ActorEntity> getAll(Connection connection, Integer page, Integer pageSize) {

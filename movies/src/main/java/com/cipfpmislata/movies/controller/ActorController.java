@@ -15,12 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cipfpmislata.movies.controller.model.actor.ActorCreateWeb;
 import com.cipfpmislata.movies.controller.model.actor.ActorDetailWeb;
 import com.cipfpmislata.movies.controller.model.actor.ActorListWeb;
+import com.cipfpmislata.movies.controller.model.director.DirectorCreateWeb;
+import com.cipfpmislata.movies.controller.model.director.DirectorDetailWeb;
 import com.cipfpmislata.movies.domain.entity.Actor;
 import com.cipfpmislata.movies.domain.service.ActorService;
 import com.cipfpmislata.movies.http_response.Response;
 import com.cipfpmislata.movies.mapper.ActorMapper;
+import com.cipfpmislata.movies.mapper.DirectorMapper;
 
 @RequestMapping("/actors")
 @RestController
@@ -51,14 +55,16 @@ public class ActorController {
     }
 
     @GetMapping("/insert")
-    public void insert(){
-        try {
-            Actor actor = null;
-            actorService.insert(actor);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw e;
-        }
+    public Response insert(@RequestBody ActorCreateWeb actorCreateWeb){
+        int id = actorService.insert(ActorMapper.mapper.toActor(actorCreateWeb));
+        ActorDetailWeb actorDetailWeb = new ActorDetailWeb(
+            id,
+            actorCreateWeb.getName(),
+            actorCreateWeb.getBirthYear(),
+            actorCreateWeb.getDeathYear()
+    );
+    
+        return new Response(actorDetailWeb, id, null, id);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

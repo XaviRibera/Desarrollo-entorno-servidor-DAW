@@ -27,8 +27,8 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void insert(Actor actor){
-        actorRepository.insert(actor);
+    public int insert(Actor actor){
+        return actorRepository.insert(actor);
     }
 
     @Override

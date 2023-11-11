@@ -19,7 +19,7 @@ public interface ActorMapper {
     
     ActorMapper mapper = Mappers.getMapper(ActorMapper.class);
 
-    ActorEntity toDirectorEntity(Actor actor);
+    ActorEntity toActorEntity(Actor actor);
 
     @Mapping(target = "id", expression = "java(resultSet.getInt(\"id\"))")
     @Mapping(target = "name", expression = "java(resultSet.getString(\"name\"))")

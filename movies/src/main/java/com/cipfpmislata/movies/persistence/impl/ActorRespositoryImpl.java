@@ -16,6 +16,7 @@ import com.cipfpmislata.movies.domain.entity.Actor;
 import com.cipfpmislata.movies.domain.entity.Director;
 import com.cipfpmislata.movies.domain.persistance.ActorRepository;
 import com.cipfpmislata.movies.exception.SQLStatmentException;
+import com.cipfpmislata.movies.mapper.ActorMapper;
 import com.cipfpmislata.movies.mapper.DirectorMapper;
 import com.cipfpmislata.movies.persistence.DAO.ActorDAO;
 import com.cipfpmislata.movies.persistence.model.ActorEntity;
@@ -43,42 +44,23 @@ public class ActorRespositoryImpl implements ActorRepository {
 
     @Override
     public Optional<Actor> findActorById(int id){
-        final String SQL = "SELECT * FROM actors WHERE id = ?";
-        try(Connection connection = DBUtil.open(true)){
-            ResultSet resultSet = DBUtil.select(connection,SQL,List.of(id));
-            if(resultSet.next()){
-                return Optional.of(
-                        new Actor(
-                        resultSet.getInt("id"),
-                        resultSet.getString("name"),
-                        resultSet.getInt("birthYear"),
-                        (resultSet.getObject("deathYear") != null)? resultSet.getInt("deathYear") : null
-                        )
-                );
-            }else {
+        try (Connection connection = DBUtil.open(true)){
+            Optional<ActorEntity> actorEntity = actorDAO.find(connection, id);
+            if(actorEntity.isEmpty()) {
                 return Optional.empty();
             }
-        } catch (SQLException e){
+            return Optional.of(ActorMapper.mapper.toActor(actorEntity.get()));
+        } catch (SQLException e) {
             throw new RuntimeException();
         }
     }
 
     @Override
-    public void insert(Actor actor) {
-        final String SQL = "INSERT INTO actors (name, birthYear, deathYear) VALUES (?, ?, ?)";
-        List<Object> params = new ArrayList<>();
-        params.add(actor.getName());
-        params.add(actor.getBirthYear());
-        params.add(actor.getDeathYear());
+    public int insert(Actor actor) {
         try (Connection connection = DBUtil.open(true)){
-            DBUtil.insert(connection, SQL, params);
-            DBUtil.close(connection);
-        } catch (DBConnectionException e) {
-            throw e;
+            return actorDAO.insert(connection, ActorMapper.mapper.toActorEntity(actor));
         } catch (SQLException e) {
-            throw new SQLStatmentException("SQL: " + SQL);
-        } catch (Exception e) {
-            System.out.println("Exception: " + e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -98,20 +80,19 @@ public class ActorRespositoryImpl implements ActorRepository {
 
     @Override
     public void update(Actor actor) {
-        final String SQL = "UPDATE actors SET name = ?, birthYear = ?, deathYear = ? WHERE id = ?";
-        List<Object> params = new ArrayList<>();
-        params.add(actor.getName());
-        params.add(actor.getBirthYear());
-        params.add(actor.getDeathYear());
-        params.add(actor.getId());
-        Connection connection = DBUtil.open(true);
-        DBUtil.update(connection, SQL, params);
+        try(Connection connection= DBUtil.open(true)) {
+            actorDAO.update(connection, ActorMapper.mapper.toActorEntity(actor));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void delete(int id) {
-        final String SQL = "DELETE FROM actors WHERE id = ?";
-        Connection connection = DBUtil.open(true);
-        DBUtil.delete(connection, SQL, List.of(id));
+        try(Connection connection= DBUtil.open(true)) {
+            actorDAO.delete(connection, id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
