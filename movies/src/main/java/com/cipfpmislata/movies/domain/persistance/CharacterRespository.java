@@ -1,5 +1,9 @@
 package com.cipfpmislata.movies.domain.persistance;
 
-public class CharacterRespository {
-    
+import java.util.List;
+
+import com.cipfpmislata.movies.domain.entity.Character;
+
+public interface CharacterRespository {
+    public List<Character> findByMovieId(int movieId);
 }

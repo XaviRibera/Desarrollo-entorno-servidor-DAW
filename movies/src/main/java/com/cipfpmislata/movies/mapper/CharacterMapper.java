@@ -7,12 +7,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import com.cipfpmislata.movies.domain.entity.Character;
 import com.cipfpmislata.movies.controller.model.character.CharacterDetailWeb;
 import com.cipfpmislata.movies.controller.model.character.CharacterListWeb;
 import com.cipfpmislata.movies.persistence.model.CharacterEntity;
 
 @Mapper(componentModel = "spring")
-public class CharacterMapper {
+public interface CharacterMapper {
     
     CharacterMapper mapper = Mappers.getMapper(CharacterMapper.class);
 

@@ -13,6 +13,6 @@ public class CharacterEntity {
     
     private int id;
     private int movieId;
-    private int actorId;
+    private ActorEntity actorEntity;
     private String characterName;
 }
