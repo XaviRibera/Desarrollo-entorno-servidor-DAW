@@ -1,6 +1,6 @@
 package com.cipfpmislata.movies.controller.model.character;
 
-import com.cipfpmislata.movies.domain.entity.Actor;
+import com.cipfpmislata.movies.controller.model.actor.ActorListWeb;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
@@ -15,5 +15,5 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CharacterListWeb {
     private String characterName;
-    private Actor actor;
+    private ActorListWeb actorListWeb;
 }

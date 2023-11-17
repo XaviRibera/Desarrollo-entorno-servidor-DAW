@@ -30,6 +30,9 @@ public interface ActorMapper {
     Actor toActor(ActorEntity actorEntity);
     
     ActorDetailWeb toActorDetailWeb(Actor actor);
+
+    @Mapping(target = "id", expression ="java(actor.getId())")
+    @Mapping(target = "name", expression = "java(actor.getName())")
     ActorListWeb toActorListWeb(Actor actor);
     Actor toActor(ActorCreateWeb actorCreateWeb);
     Actor toActor(ActorUpdateWeb actorUpdateWeb);

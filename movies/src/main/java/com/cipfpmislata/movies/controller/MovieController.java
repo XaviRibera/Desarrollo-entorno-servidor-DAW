@@ -47,6 +47,8 @@ public class MovieController {
 
     @GetMapping("/{id}")
     public MovieDetailWeb find(@PathVariable("id") int id) {
-        return  MovieMapper.mapper.toMovieDetailWeb(movieService.findByMovieId(id));
+        MovieDetailWeb movieDetailWeb = MovieMapper.mapper.toMovieDetailWeb(movieService.findByMovieId(id));
+        System.out.println();
+        return  movieDetailWeb;
     }
 }

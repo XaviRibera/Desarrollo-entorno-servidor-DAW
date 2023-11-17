@@ -1,9 +1,8 @@
 package com.cipfpmislata.movies.domain.service.impl;
 
-import com.cipfpmislata.movies.domain.entity.Actor;
+import com.cipfpmislata.movies.domain.entity.Character;
 import com.cipfpmislata.movies.domain.entity.Director;
 import com.cipfpmislata.movies.domain.entity.Movie;
-import com.cipfpmislata.movies.domain.persistance.ActorRepository;
 import com.cipfpmislata.movies.domain.persistance.CharacterRespository;
 import com.cipfpmislata.movies.domain.persistance.DirectorRepository;
 import com.cipfpmislata.movies.domain.persistance.MovieRepository;
@@ -25,7 +24,7 @@ public class MovieServiceImpl implements MovieService {
     private DirectorRepository directorRepository;
 
     @Autowired
-    private CharacterRespository characterRespository;
+    private CharacterRespository characterRepository;
 
     @Override
     public List<Movie> getAll(Integer page, Integer page_size) {
@@ -35,18 +34,8 @@ public class MovieServiceImpl implements MovieService {
     
     @Override
     public Movie findByMovieId(int id){
-        /*
         Movie movie = movieRepository.findByMovieId(id).orElseThrow(() -> new ResourceNotFoundException("Director no encontrado con id: " + id));
-
-        Director director = directorRepository.findByMovieId(id).orElse(null);
-        movie.setDirector(director);
-
-        List<Character> characters = characterRepository.findByMovieId(id);
-        movie.setCharacters(characters);
-        
         return movie;
-        */
-        return null;
     }
     @Override
     public int getTotalNumberOfRecords(){

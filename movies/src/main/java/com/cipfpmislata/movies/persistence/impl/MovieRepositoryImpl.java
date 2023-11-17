@@ -4,7 +4,11 @@ import com.cipfpmislata.movies.db.DBUtil;
 import com.cipfpmislata.movies.domain.entity.Movie;
 import com.cipfpmislata.movies.domain.persistance.MovieRepository;
 import com.cipfpmislata.movies.mapper.MovieMapper;
+import com.cipfpmislata.movies.persistence.DAO.ActorDAO;
+import com.cipfpmislata.movies.persistence.DAO.CharacterDAO;
+import com.cipfpmislata.movies.persistence.DAO.DirectorDAO;
 import com.cipfpmislata.movies.persistence.DAO.MovieDAO;
+import com.cipfpmislata.movies.persistence.model.CharacterEntity;
 import com.cipfpmislata.movies.persistence.model.MovieEntity;
 
 import java.sql.Connection;
@@ -20,6 +24,15 @@ public class MovieRepositoryImpl implements MovieRepository {
     
     @Autowired
     MovieDAO movieDAO;
+
+    @Autowired
+    DirectorDAO directorDAO;
+
+    @Autowired
+    CharacterDAO characterDAO;
+
+    @Autowired
+    ActorDAO actorDAO;
 
     @Override
     public List<Movie> getAll(Integer page, Integer pageSize) {
@@ -41,6 +54,11 @@ public class MovieRepositoryImpl implements MovieRepository {
             Optional<MovieEntity> movieEntity = movieDAO.find(connection, id);
             if(movieEntity.isEmpty()) {
                 return Optional.empty();
+            }
+            movieEntity.get().getDirectorEntity(connection, directorDAO);
+            List<CharacterEntity> characters = movieEntity.get().getCharactersEntities(connection, characterDAO);
+            for(CharacterEntity characterEntity : characters){
+                characterEntity.getActorEntity(connection, actorDAO);
             }
             return Optional.of(MovieMapper.mapper.toMovie(movieEntity.get()));
         } catch (SQLException e) {

@@ -93,4 +93,18 @@ public class ActorDAO {
             throw new RuntimeException();
         }
     }
+
+    public Optional<ActorEntity> findByCharacterId(Connection connection, int characterId){
+        final String SQL = """
+                SELECT a.* from actors a
+                INNER JOIN actors_movies am on a.id = am.actor_id
+                WHERE am.id = ?
+            """;
+        try {
+            ResultSet resultSet = DBUtil.select(connection, SQL, List.of(characterId));
+            return Optional.of(resultSet.next()? ActorMapper.mapper.toActorEntity(resultSet):null);
+        }catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
 }
