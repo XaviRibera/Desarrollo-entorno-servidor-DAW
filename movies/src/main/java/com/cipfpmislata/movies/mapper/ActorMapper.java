@@ -28,12 +28,18 @@ public interface ActorMapper {
     ActorEntity toActorEntity(ResultSet resultSet) throws SQLException;
 
     Actor toActor(ActorEntity actorEntity);
+
+    @Mapping(target = "birthYear", ignore = true)
+    @Mapping(target = "deathYear", ignore = true)
+    Actor toActor(ActorListWeb actorListWeb);
     
     ActorDetailWeb toActorDetailWeb(Actor actor);
 
     @Mapping(target = "id", expression ="java(actor.getId())")
     @Mapping(target = "name", expression = "java(actor.getName())")
     ActorListWeb toActorListWeb(Actor actor);
+
+    @Mapping(target = "id", ignore = true)
     Actor toActor(ActorCreateWeb actorCreateWeb);
     Actor toActor(ActorUpdateWeb actorUpdateWeb);
 }

@@ -41,16 +41,23 @@ public class DirectorController {
         int totalRecords = directorService.getTotalNumberOfRecords();
 
         List<Director> directors = (page != null)?directorService.getAll(pageSize, page) : directorService.getAll(null, null);
-        List<DirectorListWeb> directorWeb = directors.stream()
+        List<DirectorListWeb> directorsWeb = directors.stream()
                     .map(director -> DirectorMapper.mapper.toDirectorListWeb(director))
                     .toList();
 
-        return new Response(directorWeb, totalRecords, page, pageSize);
+            Response response = Response.builder()
+                .data(directorsWeb)
+                .totalRecords(totalRecords)
+                .build();
+            return response;
     }
 
     @GetMapping("/{id}")
-    public DirectorDetailWeb find(@PathVariable("id") int id) {
-        return  DirectorMapper.mapper.toDirectorDetailWeb(directorService.findByDirectorId(id));
+    public Response find(@PathVariable("id") int id) {
+        DirectorDetailWeb directorDetailWeb = DirectorMapper.mapper.toDirectorDetailWeb(directorService.findByDirectorId(id));
+        return Response.builder()
+                .data(directorDetailWeb)
+                .build();
     }
 
     
@@ -65,7 +72,7 @@ public class DirectorController {
             directorCreateWeb.getDeathYear()
     );
     
-        return new Response(directorDetailWeb, id, null, id);
+    return Response.builder().data(directorDetailWeb).build();
     }
     
     

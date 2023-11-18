@@ -8,8 +8,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+import org.springframework.boot.context.properties.bind.Name;
 
 import com.cipfpmislata.movies.controller.model.actor.ActorListWeb;
+import com.cipfpmislata.movies.controller.model.character.CharacterCreateWeb;
 import com.cipfpmislata.movies.controller.model.character.CharacterListWeb;
 import com.cipfpmislata.movies.domain.entity.Actor;
 import com.cipfpmislata.movies.domain.entity.Character;
@@ -21,17 +23,13 @@ public interface CharacterMapper {
     
     CharacterMapper mapper = Mappers.getMapper(CharacterMapper.class);
 
-    CharacterEntity toCharacterEntity(Character character);
-
     @Mapping(target = "id", expression = "java(resultSet.getInt(\"id\"))")
     @Mapping(target = "movieId", expression = "java(resultSet.getInt(\"movie_id\"))")
     @Mapping(target = "characterName", expression = "java(resultSet.getString(\"characters\"))")
+    @Mapping(target = "actorEntity", ignore = true)
     CharacterEntity toCharacterEntity(ResultSet resultSet) throws SQLException;
 
-    @Mapping(target = "id", expression = "java(characterEntity.getId())")
-    @Mapping(target = "movieId", expression = "java(characterEntity.getMovieId())")
     @Mapping(target = "actor", expression = "java(mapActorEntityToActor(characterEntity.getActorEntity()))")
-    @Mapping(target = "characterName", expression = "java(characterEntity.getCharacterName())")
     Character toCharacter(CharacterEntity characterEntity);
 
 
@@ -40,12 +38,29 @@ public interface CharacterMapper {
         return ActorMapper.mapper.toActor(actorEntity);
     }
 
-    @Mapping(target = "characterName", expression = "java(character.getCharacterName())")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "movieId", ignore = true)
+    @Mapping(target = "actor", expression = "java(mapActorListWebToActor(characterCreateWeb.getActorListWeb()))")
+    Character toCharacter(CharacterCreateWeb characterCreateWeb);
+
+    @Named("actorListWebToActor")
+    default Actor mapActorListWebToActor(ActorListWeb actorListWeb){
+        return ActorMapper.mapper.toActor(actorListWeb);
+    }
+
     @Mapping(target = "actorListWeb", expression = "java(mapActorToActorListWeb(character.getActor()))")
     CharacterListWeb toCharacterListWeb(Character character);
 
     @Named("actorToActorListWeb")
     default ActorListWeb mapActorToActorListWeb(Actor actor){
         return ActorMapper.mapper.toActorListWeb(actor);
+    }
+
+    @Mapping(target = "actorEntity", expression = "java(mapActorToActorEntity(character.getActor()))")
+    CharacterEntity toCharacterEntity(Character character);
+
+    @Named("actorToActorEntity")
+    default ActorEntity mapActorToActorEntity(Actor actor){
+        return ActorMapper.mapper.toActorEntity(actor);
     }
 }

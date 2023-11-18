@@ -1,5 +1,7 @@
 package com.cipfpmislata.movies.controller.model.character;
 
+import com.cipfpmislata.movies.controller.model.actor.ActorListWeb;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,5 +13,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CharacterCreateWeb {
     private String characterName;
-    private int actorId;
+    private ActorListWeb actorListWeb;
 }

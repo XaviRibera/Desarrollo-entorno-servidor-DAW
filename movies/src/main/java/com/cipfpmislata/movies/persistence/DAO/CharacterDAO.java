@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.cipfpmislata.movies.db.DBUtil;
 import com.cipfpmislata.movies.mapper.CharacterMapper;
+import com.cipfpmislata.movies.persistence.model.ActorEntity;
 import com.cipfpmislata.movies.persistence.model.CharacterEntity;
 
 @Component
@@ -32,5 +33,15 @@ public class CharacterDAO {
         } catch (SQLException e) {
             throw new RuntimeException();
         }
+    }
+
+    public void insert(Connection connection, CharacterEntity characterEntity){
+        final String SQL = "INSERT INTO actors_movies (movie_id,actor_id,characters) VALUES ( ?, ?, ? )";
+        List<Object> params = new ArrayList<>();
+        params.add(characterEntity.getMovieId());
+        ActorEntity actorEntity = characterEntity.getActorEntity();
+        params.add(actorEntity.getId());
+        params.add(characterEntity.getCharacterName());
+        DBUtil.insert(connection, SQL, params);
     }
 }

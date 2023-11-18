@@ -31,6 +31,12 @@ public interface DirectorMapper {
 
     DirectorDetailWeb toDirectorDetailWeb(Director director);
     DirectorListWeb toDirectorListWeb(Director director);
+
+    @Mapping(target = "id", ignore = true)
     Director toDirector(DirectorCreateWeb directorCreateWeb);
     Director toDirector(DirectorUpdateWeb directorUpdateWeb);
+
+    @Mapping(target = "birthYear", ignore = true)
+    @Mapping(target = "deathYear", ignore = true)
+    Director toDirector(DirectorListWeb directorListWeb);
 }

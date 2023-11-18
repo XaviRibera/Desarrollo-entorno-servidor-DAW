@@ -39,16 +39,21 @@ public class ActorController {
         int totalRecords = actorService.getTotalNumberOfRecords();
 
         List<Actor> actors = (page != null) ? actorService.getAll(page, pageSize) : actorService.getAll(null, null);
-        List<ActorListWeb> actorWeb = actors.stream()
+        List<ActorListWeb> actorsWeb = actors.stream()
                     .map(actor -> ActorMapper.mapper.toActorListWeb(actor))
                     .toList();
 
-        return new Response(actorWeb, totalRecords, page, pageSize);
+        Response response = Response.builder()
+            .data(actorsWeb)
+            .totalRecords(totalRecords)
+            .build();
+        return response;
     }
 
     @GetMapping("/{id}")
-    public ActorDetailWeb find(@PathVariable("id") int id) {
-        return  ActorMapper.mapper.toActorDetailWeb(actorService.findByActorId(id));
+    public Response find(@PathVariable("id") int id) {
+        ActorDetailWeb actorDetailWeb = ActorMapper.mapper.toActorDetailWeb(actorService.findByActorId(id));
+        return Response.builder().data(actorDetailWeb).build();
     }
 
     @GetMapping("/insert")
@@ -61,7 +66,7 @@ public class ActorController {
             actorCreateWeb.getDeathYear()
     );
     
-        return new Response(actorDetailWeb, id, null, id);
+        return Response.builder().data(actorDetailWeb).build();
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

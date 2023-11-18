@@ -30,5 +30,5 @@ public class CharacterRepositoryImpl implements CharacterRespository{
         }catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }  
+    } 
 }

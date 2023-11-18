@@ -77,8 +77,16 @@ public class MovieRepositoryImpl implements MovieRepository {
 
     @Override
     public int insert(Movie movie){
-        try(Connection connection = DBUtil.open(true)){
-            return movieDAO.insert(connection, MovieMapper.mapper.toMovieEntity(movie));
+        try(Connection connection = DBUtil.open(false)){
+            MovieEntity movieEntity = MovieMapper.mapper.toMovieEntity(movie);
+            int id = movieDAO.insert(connection, movieEntity);
+            List<CharacterEntity> charactersEntities = movieEntity.getCharactersEntities();
+            for(CharacterEntity characterEntity : charactersEntities){
+                characterEntity.setMovieId(id);
+                characterDAO.insert(connection, characterEntity);
+            }
+            connection.commit();
+            return id;
         } catch (SQLException e){
             throw new RuntimeException(e);
         }

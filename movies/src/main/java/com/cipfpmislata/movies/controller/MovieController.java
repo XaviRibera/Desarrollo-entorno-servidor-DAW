@@ -4,6 +4,8 @@ import com.cipfpmislata.movies.domain.service.MovieService;
 import com.cipfpmislata.movies.http_response.Response;
 import com.cipfpmislata.movies.mapper.MovieMapper;
 import com.cipfpmislata.movies.domain.entity.Movie;
+import com.cipfpmislata.movies.controller.model.character.CharacterCreateWeb;
+import com.cipfpmislata.movies.controller.model.character.CharacterListWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieCreateWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieDetailWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieListWeb;
@@ -20,13 +22,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@RequestMapping("/movies")
+@RequestMapping(MovieController.MOVIES)
 @RestController
 public class MovieController {
     @Autowired
     private MovieService movieService;
+
+    @Value("${application.url}")
+    private String urlBase;
+
+    public static final String MOVIES = "/movies";
     
     @Value("${LIMIT}")
     private int LIMIT;
@@ -36,29 +44,47 @@ public class MovieController {
     @GetMapping("")
     public Response getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
         pageSize = (pageSize != null)? pageSize : LIMIT;
-        int totalRecords = movieService.getTotalNumberOfRecords();
-
+        
         List<Movie> movies = (page != null)?movieService.getAll(page, pageSize) : movieService.getAll(null,null);
-        List<MovieListWeb> movieWeb = movies.stream()
+        List<MovieListWeb> moviesWeb = movies.stream()
                 .map(movie -> MovieMapper.mapper.toMovieListWeb(movie))
                 .toList();
-
-        Response response = new Response(movieWeb, totalRecords, page, pageSize);
-
+        int totalRecords = movieService.getTotalNumberOfRecords();
+        Response response = Response.builder()
+                .data(moviesWeb)
+                .totalRecords(totalRecords)
+                .build();
         return response;
     }
 
     @GetMapping("/{id}")
-    public MovieDetailWeb find(@PathVariable("id") int id) {
+    public Response find(@PathVariable("id") int id) {
         MovieDetailWeb movieDetailWeb = MovieMapper.mapper.toMovieDetailWeb(movieService.findByMovieId(id));
-        System.out.println();
-        return  movieDetailWeb;
+        return Response.builder()
+                .data(movieDetailWeb)
+                .build();
     }
 
     @PostMapping("")
-    public MovieDetailWeb insert(@RequestBody MovieCreateWeb movieCreateWeb){
+    public Response insert(@RequestBody MovieCreateWeb movieCreateWeb){
         int id = movieService.insert(MovieMapper.mapper.toMovie(movieCreateWeb));
-
-        return MovieMapper.mapper.toMovieDetailWeb(movieService.findByMovieId(id));
+        List<CharacterCreateWeb> charactersCreateWeb = movieCreateWeb.getCharactersCreateWeb();
+        List<CharacterListWeb> charactersListWeb = new ArrayList<>();
+        for(CharacterCreateWeb characterCreateWeb : charactersCreateWeb){
+            charactersListWeb.add( new CharacterListWeb(
+                characterCreateWeb.getCharacterName(),
+                characterCreateWeb.getActorListWeb()
+            ));
+        }
+        MovieDetailWeb movieDetailWeb = new MovieDetailWeb(
+            id,
+            movieCreateWeb.getTitle(),
+            movieCreateWeb.getYear(),
+            movieCreateWeb.getImage(),
+            movieCreateWeb.getRuntime(),
+            movieCreateWeb.getDirectorListWeb(),
+            charactersListWeb
+        );
+        return Response.builder().data(movieDetailWeb).build();
     }
 }

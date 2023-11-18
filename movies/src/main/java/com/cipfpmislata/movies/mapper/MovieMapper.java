@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
+import com.cipfpmislata.movies.controller.model.character.CharacterCreateWeb;
 import com.cipfpmislata.movies.controller.model.character.CharacterListWeb;
 import com.cipfpmislata.movies.controller.model.director.DirectorListWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieCreateWeb;
@@ -32,25 +33,29 @@ public interface MovieMapper {
     @Mapping(target = "image", expression = "java(resultSet.getString(\"image\"))")
     @Mapping(target = "runtime", expression = "java(resultSet.getInt(\"runtime\"))")
     @Mapping(target = "description", expression = "java(resultSet.getString(\"description\"))")
+    @Mapping(target = "directorEntity", ignore = true)
+    @Mapping(target = "charactersEntities", ignore = true)
     MovieEntity toMovieEntity(ResultSet resultSet) throws SQLException;
 
+    @Mapping(target = "directorEntity", expression = "java(mapDirectorToDirectorEntity(movie.getDirector()))")
+    @Mapping(target = "charactersEntities", expression = "java(mapCharactersToCharactersEntities(movie.getCharacters()))")
     MovieEntity toMovieEntity(Movie movie);
+
+    @Named("directorToDirectorEntity")
+    default DirectorEntity mapDirectorToDirectorEntity(Director director){
+        return DirectorMapper.mapper.toDirectorEntity(director);
+    }
+
+    @Named("charactersToCharactersEntities")
+    default List<CharacterEntity> mapCharactersToCharactersEntities(List<Character> characters){
+        return characters.stream()
+                .map(CharacterMapper.mapper::toCharacterEntity)
+                .toList();
+    }
     
-    @Mapping(target = "id", expression = "java(movieEntity.getId())")
-    @Mapping(target = "title", expression = "java(movieEntity.getTitle())")
-    @Mapping(target = "year", expression = "java(movieEntity.getYear())")
-    @Mapping(target = "image", expression = "java(movieEntity.getImage())")
-    @Mapping(target = "description", expression = "java(movieEntity.getDescription())")
     @Mapping(target = "director", expression = "java(mapDirectorEntityToDirector(movieEntity.getDirectorEntity()))")
     @Mapping(target = "characters", expression = "java(mapCharactersEntitiesToCharacters(movieEntity.getCharactersEntities()))")
     Movie toMovie(MovieEntity movieEntity);
-
-    @Mapping(target =  "title", expression = "java(movieCreateWeb.getTitle())")
-    @Mapping(target = "year", expression = "java(movieCreateWeb.getYear())")
-    @Mapping(target = "image", expression = "java(movieCreateWeb.getImage())")
-    @Mapping(target = "runtime", expression = "java(movieCreateWeb.getRuntime())")
-    @Mapping(target = "description", expression = "java(movieCreateWeb.getDescription())")
-    Movie toMovie(MovieCreateWeb movieCreateWeb);
 
     @Named("directorEntityToDirector")
     default Director mapDirectorEntityToDirector(DirectorEntity directorEntity){
@@ -63,14 +68,26 @@ public interface MovieMapper {
                 .map(CharacterMapper.mapper::toCharacter)
                 .toList();
     }
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "director", expression = "java(mapDirectorListWebToDirector(movieCreateWeb.getDirectorListWeb()))")
+    @Mapping(target = "characters", expression = "java(mapCharactersCreateWebToCharacters(movieCreateWeb.getCharactersCreateWeb()))")
+    Movie toMovie(MovieCreateWeb movieCreateWeb);
+
+    @Named("directorListWebToDirector")
+    default Director mapDirectorListWebToDirector(DirectorListWeb directorListWeb){
+        return DirectorMapper.mapper.toDirector(directorListWeb);
+    }
+
+    @Named("charactersCreateWebToCharacters")
+    default List<Character> mapCharactersCreateWebToCharacters(List<CharacterCreateWeb> charactersCreateWeb){
+        return charactersCreateWeb.stream()
+                .map(CharacterMapper.mapper::toCharacter)
+                .toList();
+    }
     
     MovieListWeb toMovieListWeb(Movie movie);
 
-    @Mapping(target = "id", expression = "java(movie.getId())")
-    @Mapping(target = "title", expression = "java(movie.getTitle())")
-    @Mapping(target = "year", expression = "java(movie.getYear())")
-    @Mapping(target = "image", expression = "java(movie.getImage())")
-    @Mapping(target = "runtime", expression = "java(movie.getRuntime())")
     @Mapping(target = "directorListWeb", expression = "java(mapDirectorToDirectorListWeb(movie.getDirector()))")
     @Mapping(target = "charactersListWeb", expression = "java(mapCharactersToCharactersListWeb(movie.getCharacters()))")
     MovieDetailWeb toMovieDetailWeb(Movie movie);
