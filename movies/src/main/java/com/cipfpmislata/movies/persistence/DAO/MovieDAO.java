@@ -56,4 +56,16 @@ public class MovieDAO {
             throw new RuntimeException("SQL: " + SQL);
         }
     }
+
+    public int insert(Connection connection, MovieEntity movieEntity){
+        final String SQL = "INSERT INTO movies (title,year,image,runtime,description) VALUES ( ?, ?, ?, ?, ? )";
+        List<Object> params = new ArrayList<>();
+        params.add(movieEntity.getTitle());
+        params.add(movieEntity.getYear());
+        params.add(movieEntity.getImage());
+        params.add(movieEntity.getRuntime());
+        params.add(movieEntity.getDescription());
+        int id = DBUtil.insert(connection, SQL, params);
+        return id;
+    }
 }

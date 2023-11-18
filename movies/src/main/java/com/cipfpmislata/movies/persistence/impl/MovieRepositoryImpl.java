@@ -74,4 +74,13 @@ public class MovieRepositoryImpl implements MovieRepository {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public int insert(Movie movie){
+        try(Connection connection = DBUtil.open(true)){
+            return movieDAO.insert(connection, MovieMapper.mapper.toMovieEntity(movie));
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
 }

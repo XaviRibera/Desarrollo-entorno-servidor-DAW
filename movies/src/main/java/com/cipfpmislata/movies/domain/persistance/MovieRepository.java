@@ -9,4 +9,5 @@ public interface MovieRepository {
     public List<Movie> getAll(Integer page, Integer page_size);
     Optional<Movie> findByMovieId(int id);
     int getTotalNumberOfRecords();
+    int insert(Movie movie);
 }

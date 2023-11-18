@@ -27,8 +27,14 @@ public class MovieServiceImpl implements MovieService {
         Movie movie = movieRepository.findByMovieId(id).orElseThrow(() -> new ResourceNotFoundException("Director no encontrado con id: " + id));
         return movie;
     }
+
     @Override
     public int getTotalNumberOfRecords(){
         return movieRepository.getTotalNumberOfRecords();
+    }
+
+    @Override
+    public int insert(Movie movie){
+        return movieRepository.insert(movie);
     }
 }

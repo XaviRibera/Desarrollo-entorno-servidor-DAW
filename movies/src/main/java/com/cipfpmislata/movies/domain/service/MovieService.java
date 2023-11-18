@@ -8,4 +8,5 @@ public interface MovieService {
     List<Movie> getAll(Integer page, Integer page_size);
     Movie findByMovieId(int id);
     int getTotalNumberOfRecords();
+    int insert(Movie movie);
 }

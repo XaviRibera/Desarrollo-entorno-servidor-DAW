@@ -4,6 +4,7 @@ import com.cipfpmislata.movies.domain.service.MovieService;
 import com.cipfpmislata.movies.http_response.Response;
 import com.cipfpmislata.movies.mapper.MovieMapper;
 import com.cipfpmislata.movies.domain.entity.Movie;
+import com.cipfpmislata.movies.controller.model.movie.MovieCreateWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieDetailWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieListWeb;
 
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -50,5 +53,12 @@ public class MovieController {
         MovieDetailWeb movieDetailWeb = MovieMapper.mapper.toMovieDetailWeb(movieService.findByMovieId(id));
         System.out.println();
         return  movieDetailWeb;
+    }
+
+    @PostMapping("")
+    public MovieDetailWeb insert(@RequestBody MovieCreateWeb movieCreateWeb){
+        int id = movieService.insert(MovieMapper.mapper.toMovie(movieCreateWeb));
+
+        return MovieMapper.mapper.toMovieDetailWeb(movieService.findByMovieId(id));
     }
 }

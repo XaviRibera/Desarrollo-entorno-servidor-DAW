@@ -30,5 +30,13 @@ public class Movie {
         this.image = image;
         this.runtime = runtime;
         this.description = description;
-    } 
+    }
+
+    public Movie(String title, int year, String image, int runtime, String description) {
+        this.title = title;
+        this.year = year;
+        this.image = image;
+        this.runtime = runtime;
+        this.description = description;
+    }
 }
