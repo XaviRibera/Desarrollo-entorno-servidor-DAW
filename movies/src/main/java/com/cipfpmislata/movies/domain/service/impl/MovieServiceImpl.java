@@ -1,10 +1,6 @@
 package com.cipfpmislata.movies.domain.service.impl;
 
-import com.cipfpmislata.movies.domain.entity.Character;
-import com.cipfpmislata.movies.domain.entity.Director;
 import com.cipfpmislata.movies.domain.entity.Movie;
-import com.cipfpmislata.movies.domain.persistance.CharacterRespository;
-import com.cipfpmislata.movies.domain.persistance.DirectorRepository;
 import com.cipfpmislata.movies.domain.persistance.MovieRepository;
 import com.cipfpmislata.movies.domain.service.MovieService;
 import com.cipfpmislata.movies.exception.ResourceNotFoundException;
@@ -19,12 +15,6 @@ public class MovieServiceImpl implements MovieService {
 
     @Autowired
     private MovieRepository movieRepository;
-
-    @Autowired
-    private DirectorRepository directorRepository;
-
-    @Autowired
-    private CharacterRespository characterRepository;
 
     @Override
     public List<Movie> getAll(Integer page, Integer page_size) {
