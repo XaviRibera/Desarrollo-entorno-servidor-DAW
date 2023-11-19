@@ -76,9 +76,12 @@ public class ActorController {
         actorService.update(actor);
     }
     
+    //----------El Delete de Actor no se podria sin hacer validadiones----------\\
+    /*
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") int id) {
         actorService.delete(id);
     }
+    */
 }

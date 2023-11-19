@@ -13,6 +13,7 @@ import com.cipfpmislata.movies.controller.model.movie.MovieListWeb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,5 +87,10 @@ public class MovieController {
             charactersListWeb
         );
         return Response.builder().data(movieDetailWeb).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") int movieId){
+        movieService.delete(movieId);
     }
 }

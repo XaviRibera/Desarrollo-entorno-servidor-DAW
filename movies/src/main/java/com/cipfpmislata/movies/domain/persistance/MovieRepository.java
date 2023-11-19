@@ -10,4 +10,5 @@ public interface MovieRepository {
     Optional<Movie> findByMovieId(int id);
     int getTotalNumberOfRecords();
     int insert(Movie movie);
+    public void delete(int movieId);
 }

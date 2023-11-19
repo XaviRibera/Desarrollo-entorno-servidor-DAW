@@ -79,13 +79,17 @@ public class DirectorController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
     public void update(@PathVariable("id") int id, @RequestBody DirectorUpdateWeb directorUpdateWeb) {
-        directorUpdateWeb.setId(id);
-        directorService.update(DirectorMapper.mapper.toDirector(directorUpdateWeb));
+        Director director = DirectorMapper.mapper.toDirector(directorUpdateWeb);
+        director.setId(id);
+        directorService.update(director);
     }
 
+    //----------El Delete de Director no se podria sin hacer validadiones----------\\
+    /*
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") int id) {
         directorService.delete(id);
     }
+    */
 }

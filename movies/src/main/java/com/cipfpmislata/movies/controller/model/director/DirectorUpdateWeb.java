@@ -9,8 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
  
 public class DirectorUpdateWeb {
- 
-    private int id;
+
     private String name;
     private int birthYear;
     private Integer deathYear;

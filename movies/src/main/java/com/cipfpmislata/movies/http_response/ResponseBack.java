@@ -13,7 +13,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL) // No incluirá atributos nulos en el JSON
 @JsonPropertyOrder({ "page", "page size", "total pages", "total records", "previous", "next", "data"})
-public class Response {
+public class ResponseBack {
 
     private Object data;
     //Los ponemos como Integer para que el valor por defecto sea nulo y no 0, así se pueden excluir del JSON
@@ -27,7 +27,7 @@ public class Response {
     private String next;
     private String previous;
 
-    public Response(Object data, int totalRecords, Integer page, int pageSize) { 
+    public ResponseBack(Object data, int totalRecords, Integer page, int pageSize) { 
         this.data = data;
         this.totalRecords = totalRecords;
         if(page != null)

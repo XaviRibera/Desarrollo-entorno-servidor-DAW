@@ -38,6 +38,13 @@ public class MovieRepositoryImpl implements MovieRepository {
     public List<Movie> getAll(Integer page, Integer pageSize) {
         try(Connection connection = DBUtil.open(true)) {
             List<MovieEntity> movieEntities = movieDAO.getAll(connection, page, pageSize);
+            for(MovieEntity movieEntity : movieEntities){
+                movieEntity.getDirectorEntity(connection, directorDAO);
+                List<CharacterEntity> charactersEntities = movieEntity.getCharactersEntities(connection, characterDAO);
+                for(CharacterEntity characterEntity : charactersEntities){
+                    characterEntity.getActorEntity(connection, actorDAO);
+                }
+            }
             List<Movie> movies = movieEntities.stream()
                     .map(movieEntity -> MovieMapper.mapper.toMovie(movieEntity))
                     .toList();
@@ -56,8 +63,8 @@ public class MovieRepositoryImpl implements MovieRepository {
                 return Optional.empty();
             }
             movieEntity.get().getDirectorEntity(connection, directorDAO);
-            List<CharacterEntity> characters = movieEntity.get().getCharactersEntities(connection, characterDAO);
-            for(CharacterEntity characterEntity : characters){
+            List<CharacterEntity> charactersEntities = movieEntity.get().getCharactersEntities(connection, characterDAO);
+            for(CharacterEntity characterEntity : charactersEntities){
                 characterEntity.getActorEntity(connection, actorDAO);
             }
             return Optional.of(MovieMapper.mapper.toMovie(movieEntity.get()));
@@ -89,6 +96,17 @@ public class MovieRepositoryImpl implements MovieRepository {
             return id;
         } catch (SQLException e){
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(int movieId){
+        try(Connection connection = DBUtil.open(false)){
+            characterDAO.delete(connection, movieId);
+            movieDAO.delete(connection, movieId);
+            connection.commit();
+        }catch (SQLException e){
+                throw new RuntimeException(e);
         }
     }
 }

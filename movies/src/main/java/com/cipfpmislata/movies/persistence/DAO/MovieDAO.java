@@ -68,4 +68,9 @@ public class MovieDAO {
         int id = DBUtil.insert(connection, SQL, params);
         return id;
     }
+
+    public void delete(Connection connection, int movieId){
+        final String SQL = "DELETE FROM movies WHERE id = ?";
+        DBUtil.delete(connection, SQL, List.of(movieId));
+    }
 }

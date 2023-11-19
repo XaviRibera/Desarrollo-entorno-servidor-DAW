@@ -44,4 +44,9 @@ public class CharacterDAO {
         params.add(characterEntity.getCharacterName());
         DBUtil.insert(connection, SQL, params);
     }
+
+    public void delete(Connection connection, int movieId){
+        final String SQL = "DELETE FROM actors_movies WHERE movie_id = ?";
+        DBUtil.delete(connection, SQL, List.of(movieId));
+    }
 }
