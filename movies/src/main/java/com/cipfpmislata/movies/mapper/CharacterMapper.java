@@ -8,7 +8,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
-import org.springframework.boot.context.properties.bind.Name;
 
 import com.cipfpmislata.movies.controller.model.actor.ActorListWeb;
 import com.cipfpmislata.movies.controller.model.character.CharacterCreateWeb;
