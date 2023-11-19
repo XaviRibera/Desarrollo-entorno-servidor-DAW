@@ -9,7 +9,6 @@ import com.cipfpmislata.movies.domain.entity.Movie;
 import com.cipfpmislata.movies.controller.model.character.CharacterCreateWeb;
 import com.cipfpmislata.movies.controller.model.character.CharacterDetailWeb;
 import com.cipfpmislata.movies.controller.model.character.CharacterListWeb;
-import com.cipfpmislata.movies.controller.model.character.CharacterUpdateWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieCreateWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieDetailWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieListWeb;
