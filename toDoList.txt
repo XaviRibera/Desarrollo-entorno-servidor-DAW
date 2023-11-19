@@ -1,0 +1,18 @@
+Funcion							Endpoint					JSON (send)				Function Name			Hechos
+
+select movies						GetMapping("/movies")				void					getAll				X
+select movie by movie_id				GetMapping("/movies/{id}")			void					findById			X
+select character by movie_id				GetMapping("/movies/{id}/characters")		void					getCharacterByMovieId		X		
+select character by character_id			GetMapping("/movies/{id}/characters/{id}")	void					findByCharacterId		X
+
+insert movie with characters 				PostMapping("/movies")				MovieCreateWeb				insertMovie			X
+insert character					PostMapping("/movies/{id}/characters")		List<CharacterCreateWeb>		insertCharacter			X
+
+update movie with characters				PutMapping("/movies/{id}")			MovieUpdateWeb				updateMovie			X
+update movie without characters(if characters==null)	PutMapping("/movies/{id}")			MovieUpdateWeb(-charactersUpdateWeb)	updateMovie			-
+update characters by movie_id				PutMapping("/movies/{id}/characters")		List<CharacterUpdateWeb>		updateCharacterByMovieId	-
+update character by characterId				PutMapping("/movies/{id}/characetrs/{id }")	CharacterUpdateWeb			updateCharacterById
+
+delete movie by id					DeleteMapping("/movies/{id}")			void					deleteMovie			X
+delete character by id					DeleteMapping("/movies/{id}/characters/{id}")	void					deleteCharacterById		X
+delete characters by movie_id				DeleteMapping("/movies/{id}/characters")	void					deleteCharacterByMovieId	X
