@@ -141,13 +141,8 @@ public class MovieController {
     @PutMapping("/{id}")
     public Response updateMovie(@PathVariable("id") int movieId,@RequestBody MovieUpdateWeb movieUpdateWeb){
         Movie movie = MovieMapper.mapper.toMovie(movieUpdateWeb);
-        if(movie.getCharacters() != null){
-            movie.setId(movieId);
-            movieService.updateMovie(movie);
-        }else{
-
-        }
-        
+        movie.setId(movieId);
+        movieService.updateMovie(movie);
         return Response.builder().data(MovieMapper.mapper.toMovieDetailWeb(movie)).build();
     }
 }
