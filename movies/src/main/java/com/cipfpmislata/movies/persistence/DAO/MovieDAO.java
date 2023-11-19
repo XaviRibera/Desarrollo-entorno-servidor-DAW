@@ -73,4 +73,16 @@ public class MovieDAO {
         final String SQL = "DELETE FROM movies WHERE id = ?";
         DBUtil.delete(connection, SQL, List.of(movieId));
     }
+
+    public void update(Connection connection, MovieEntity movieEntity){
+        final String SQL = "UPDATE movies SET title = ?, year = ?, image = ?, runtime = ?, description = ?, director_id = ?";
+        List<Object> params = new ArrayList<>();
+        params.add(movieEntity.getTitle());
+        params.add(movieEntity.getYear());
+        params.add(movieEntity.getImage());
+        params.add(movieEntity.getRuntime());
+        params.add(movieEntity.getDescription());
+        params.add(movieEntity.getDirectorEntity().getId());
+        DBUtil.update(connection, SQL, params);
+    }
 }

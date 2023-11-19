@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterCreateWeb {
+    private int movieId;
     private String characterName;
     private ActorListWeb actorListWeb;
 }

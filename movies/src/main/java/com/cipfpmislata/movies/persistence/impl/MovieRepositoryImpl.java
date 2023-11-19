@@ -1,8 +1,10 @@
 package com.cipfpmislata.movies.persistence.impl;
 
 import com.cipfpmislata.movies.db.DBUtil;
+import com.cipfpmislata.movies.domain.entity.Character;
 import com.cipfpmislata.movies.domain.entity.Movie;
 import com.cipfpmislata.movies.domain.persistance.MovieRepository;
+import com.cipfpmislata.movies.mapper.CharacterMapper;
 import com.cipfpmislata.movies.mapper.MovieMapper;
 import com.cipfpmislata.movies.persistence.DAO.ActorDAO;
 import com.cipfpmislata.movies.persistence.DAO.CharacterDAO;
@@ -13,6 +15,7 @@ import com.cipfpmislata.movies.persistence.model.MovieEntity;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,6 +77,35 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
+    public List<Character> getCharacterByMovieId(int id){
+        try(Connection connection = DBUtil.open(true)){
+            List<CharacterEntity> characterEntities = characterDAO.findByMovieId(connection, id);
+            List<Character> characters = new ArrayList<>();
+            for(CharacterEntity characterEntity : characterEntities){
+                characterEntity.getActorEntity(connection, actorDAO);
+                characters.add(CharacterMapper.mapper.toCharacter(characterEntity));
+            }
+            return characters;
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Character> findByCharacterId(int id){
+        try(Connection connection = DBUtil.open(true)){
+            Optional<CharacterEntity> characterEntity = characterDAO.findByCharacterId(connection, id);
+            if(characterEntity.isEmpty()){
+                return Optional.empty();
+            }
+            characterEntity.get().getActorEntity(connection, actorDAO);
+            return Optional.of(CharacterMapper.mapper.toCharacter(characterEntity.get()));
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public int getTotalNumberOfRecords() {
         try(Connection connection = DBUtil.open(true)) {
             return movieDAO.getTotalNumberOfRecords(connection);
@@ -83,14 +115,16 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public int insert(Movie movie){
+    public int insertMovie(Movie movie){
         try(Connection connection = DBUtil.open(false)){
             MovieEntity movieEntity = MovieMapper.mapper.toMovieEntity(movie);
             int id = movieDAO.insert(connection, movieEntity);
             List<CharacterEntity> charactersEntities = movieEntity.getCharactersEntities();
-            for(CharacterEntity characterEntity : charactersEntities){
-                characterEntity.setMovieId(id);
-                characterDAO.insert(connection, characterEntity);
+            if(charactersEntities != null){
+                for(CharacterEntity characterEntity : charactersEntities){
+                    characterEntity.setMovieId(id);
+                    characterDAO.insert(connection, characterEntity);
+                }
             }
             connection.commit();
             return id;
@@ -100,13 +134,61 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public void delete(int movieId){
+    public void deleteMovie(int movieId){
         try(Connection connection = DBUtil.open(false)){
-            characterDAO.delete(connection, movieId);
+            characterDAO.deleteByMovieId(connection, movieId);
             movieDAO.delete(connection, movieId);
             connection.commit();
         }catch (SQLException e){
-                throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void deleteCharacterByMovieId(int movieId){
+        try(Connection connection = DBUtil.open(true)){
+            characterDAO.deleteByMovieId(connection, movieId);
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteCharacterById(int characterId){
+        try(Connection connection = DBUtil.open(true)){
+            characterDAO.deleteByCharacterId(connection, characterId);
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void updateMovie(Movie movie){
+        try(Connection connection = DBUtil.open(false)){
+            MovieEntity movieEntity = MovieMapper.mapper.toMovieEntity(movie);
+            movieDAO.update(connection, movieEntity);
+            int movieId = movieEntity.getId();
+            characterDAO.deleteByMovieId(connection, movieId);
+            for(CharacterEntity characterEntity : movieEntity.getCharactersEntities()){
+                characterEntity.setMovieId(movieId);
+                characterDAO.insert(connection, characterEntity);
+            }
+            connection.commit();
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void insertCharacter(List<Character> characters) {
+        try(Connection connection = DBUtil.open(false)){
+            for(Character character : characters){
+                characterDAO.insert(connection, CharacterMapper.mapper.toCharacterEntity(character));
+            }
+            connection.commit();
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        
     }
 }

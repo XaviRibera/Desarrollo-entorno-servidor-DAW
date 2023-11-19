@@ -2,6 +2,7 @@ package com.cipfpmislata.movies.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,7 +11,9 @@ import org.mapstruct.factory.Mappers;
 
 import com.cipfpmislata.movies.controller.model.actor.ActorListWeb;
 import com.cipfpmislata.movies.controller.model.character.CharacterCreateWeb;
+import com.cipfpmislata.movies.controller.model.character.CharacterDetailWeb;
 import com.cipfpmislata.movies.controller.model.character.CharacterListWeb;
+import com.cipfpmislata.movies.controller.model.character.CharacterUpdateWeb;
 import com.cipfpmislata.movies.domain.entity.Actor;
 import com.cipfpmislata.movies.domain.entity.Character;
 import com.cipfpmislata.movies.persistence.model.ActorEntity;
@@ -30,6 +33,9 @@ public interface CharacterMapper {
     @Mapping(target = "actor", expression = "java(mapActorEntityToActor(characterEntity.getActorEntity()))")
     Character toCharacter(CharacterEntity characterEntity);
 
+    @Mapping(target = "actorListWeb", expression = "java(mapActorToActorListWeb(character.getActor()))")
+    CharacterDetailWeb toCharacterDetailWeb(Character character);
+
 
     @Named("actorEntityToActor")
     default Actor mapActorEntityToActor(ActorEntity actorEntity){
@@ -37,7 +43,6 @@ public interface CharacterMapper {
     }
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "movieId", ignore = true)
     @Mapping(target = "actor", expression = "java(mapActorListWebToActor(characterCreateWeb.getActorListWeb()))")
     Character toCharacter(CharacterCreateWeb characterCreateWeb);
 
@@ -61,4 +66,10 @@ public interface CharacterMapper {
     default ActorEntity mapActorToActorEntity(Actor actor){
         return ActorMapper.mapper.toActorEntity(actor);
     }
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "actor", expression = "java(mapActorListWebToActor(characterUpdateWeb.getActorListWeb()))")
+    Character toCharacter(CharacterUpdateWeb characterUpdateWeb);
+
+    List<Character> toCharacters(List<CharacterCreateWeb> charactersCreateWeb);
 }

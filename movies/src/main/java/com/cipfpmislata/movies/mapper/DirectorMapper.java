@@ -34,6 +34,7 @@ public interface DirectorMapper {
 
     @Mapping(target = "id", ignore = true)
     Director toDirector(DirectorCreateWeb directorCreateWeb);
+    @Mapping(target = "id", ignore = true)
     Director toDirector(DirectorUpdateWeb directorUpdateWeb);
 
     @Mapping(target = "birthYear", ignore = true)

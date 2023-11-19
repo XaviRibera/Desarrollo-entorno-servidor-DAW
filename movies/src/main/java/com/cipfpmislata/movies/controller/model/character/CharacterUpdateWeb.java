@@ -1,20 +1,19 @@
 package com.cipfpmislata.movies.controller.model.character;
 
 import com.cipfpmislata.movies.controller.model.actor.ActorListWeb;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@ToString
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class CharacterDetailWeb {
-    private int id;
+@NoArgsConstructor
+public class CharacterUpdateWeb {
     private int movieId;
     private ActorListWeb actorListWeb;
     private String characterName;

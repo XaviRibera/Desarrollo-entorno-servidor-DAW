@@ -2,13 +2,18 @@ package com.cipfpmislata.movies.controller;
 
 import com.cipfpmislata.movies.domain.service.MovieService;
 import com.cipfpmislata.movies.http_response.Response;
+import com.cipfpmislata.movies.mapper.CharacterMapper;
 import com.cipfpmislata.movies.mapper.MovieMapper;
+import com.cipfpmislata.movies.domain.entity.Character;
 import com.cipfpmislata.movies.domain.entity.Movie;
 import com.cipfpmislata.movies.controller.model.character.CharacterCreateWeb;
+import com.cipfpmislata.movies.controller.model.character.CharacterDetailWeb;
 import com.cipfpmislata.movies.controller.model.character.CharacterListWeb;
+import com.cipfpmislata.movies.controller.model.character.CharacterUpdateWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieCreateWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieDetailWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieListWeb;
+import com.cipfpmislata.movies.controller.model.movie.MovieUpdateWeb;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,16 +65,36 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public Response find(@PathVariable("id") int id) {
+    public Response findById(@PathVariable("id") int id) {
         MovieDetailWeb movieDetailWeb = MovieMapper.mapper.toMovieDetailWeb(movieService.findByMovieId(id));
         return Response.builder()
                 .data(movieDetailWeb)
                 .build();
     }
 
+    @GetMapping("/{id}/characters")
+    public Response getCharacterByMovieId(@PathVariable("id") int id){
+        List<CharacterListWeb> charactersListWeb = new ArrayList<>();
+        List<Character> characters = movieService.getCharacterByMovieId(id);
+        for(Character character : characters){
+            charactersListWeb.add(CharacterMapper.mapper.toCharacterListWeb(character));
+        }
+        return Response.builder()
+                .data(charactersListWeb)
+                .build();
+    }
+
+    @GetMapping("/{movieId}/characters/{characterId}")
+    public Response findByCharacterId(@PathVariable("characterId") int id){
+        CharacterDetailWeb characterDetailWeb = CharacterMapper.mapper.toCharacterDetailWeb(movieService.findByCharacterId(id));
+        return Response.builder()
+                .data(characterDetailWeb)
+                .build();
+    }
+
     @PostMapping("")
-    public Response insert(@RequestBody MovieCreateWeb movieCreateWeb){
-        int id = movieService.insert(MovieMapper.mapper.toMovie(movieCreateWeb));
+    public Response insertMovie(@RequestBody MovieCreateWeb movieCreateWeb){
+        int id = movieService.insertMovie(MovieMapper.mapper.toMovie(movieCreateWeb));
         List<CharacterCreateWeb> charactersCreateWeb = movieCreateWeb.getCharactersCreateWeb();
         List<CharacterListWeb> charactersListWeb = new ArrayList<>();
         for(CharacterCreateWeb characterCreateWeb : charactersCreateWeb){
@@ -89,8 +115,39 @@ public class MovieController {
         return Response.builder().data(movieDetailWeb).build();
     }
 
+    @PostMapping("/{id}/characters")
+    public Response insertCharacter(@PathVariable("id") int movieId, @RequestBody List<CharacterCreateWeb> charactersCreateWeb){
+        movieService.insertCharacter(CharacterMapper.mapper.toCharacters(charactersCreateWeb));
+        return Response.builder()
+                .data(MovieMapper.mapper.toMovieDetailWeb(movieService.findByMovieId(movieId)))
+                .build();
+    }
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") int movieId){
-        movieService.delete(movieId);
+    public void deleteMovie(@PathVariable("id") int movieId){
+        movieService.deleteMovie(movieId);
+    }
+
+    @DeleteMapping("/{id}/characters")
+    public void deleteCharacterByMovieId(@PathVariable("id") int movieId){
+        movieService.deleteCharacterByMovieId(movieId);
+    }
+
+    @DeleteMapping("/{movieId}/characters/{characterId}")
+    public void deleteCharacterById(@PathVariable("characterId") int characterId){
+        movieService.deleteCharacterById(characterId);
+    }
+
+    @PutMapping("/{id}")
+    public Response updateMovie(@PathVariable("id") int movieId,@RequestBody MovieUpdateWeb movieUpdateWeb){
+        Movie movie = MovieMapper.mapper.toMovie(movieUpdateWeb);
+        if(movie.getCharacters() != null){
+            movie.setId(movieId);
+            movieService.updateMovie(movie);
+        }else{
+
+        }
+        
+        return Response.builder().data(MovieMapper.mapper.toMovieDetailWeb(movie)).build();
     }
 }

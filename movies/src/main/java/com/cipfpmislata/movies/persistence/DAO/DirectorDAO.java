@@ -64,7 +64,6 @@ public class DirectorDAO {
         params.add(directorEntity.getDeathYear());
         params.add(directorEntity.getId());
         DBUtil.update(connection, SQL, params);
-        DBUtil.close(connection);
     }
  
     public void delete(Connection connection, int id) {

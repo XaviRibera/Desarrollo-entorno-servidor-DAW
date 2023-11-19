@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
@@ -35,6 +36,16 @@ public class CharacterDAO {
         }
     }
 
+    public Optional<CharacterEntity> findByCharacterId(Connection connection, int id){
+        final String SQL = "SELECT * FROM actors_movies WHERE id = ?";
+        try{
+            ResultSet resultSet = DBUtil.select(connection, SQL, List.of(id));
+            return Optional.ofNullable(resultSet.next()?CharacterMapper.mapper.toCharacterEntity(resultSet):null);
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
+
     public void insert(Connection connection, CharacterEntity characterEntity){
         final String SQL = "INSERT INTO actors_movies (movie_id,actor_id,characters) VALUES ( ?, ?, ? )";
         List<Object> params = new ArrayList<>();
@@ -45,8 +56,13 @@ public class CharacterDAO {
         DBUtil.insert(connection, SQL, params);
     }
 
-    public void delete(Connection connection, int movieId){
+    public void deleteByMovieId(Connection connection, int movieId){
         final String SQL = "DELETE FROM actors_movies WHERE movie_id = ?";
         DBUtil.delete(connection, SQL, List.of(movieId));
+    }
+
+    public void deleteByCharacterId(Connection connection, int characterId){
+        final String SQL = "DELETE FROM actors_movies WHERE id = ?";
+        DBUtil.delete(connection, SQL, List.of(characterId));
     }
 }

@@ -11,10 +11,12 @@ import org.mapstruct.factory.Mappers;
 
 import com.cipfpmislata.movies.controller.model.character.CharacterCreateWeb;
 import com.cipfpmislata.movies.controller.model.character.CharacterListWeb;
+import com.cipfpmislata.movies.controller.model.character.CharacterUpdateWeb;
 import com.cipfpmislata.movies.controller.model.director.DirectorListWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieCreateWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieDetailWeb;
 import com.cipfpmislata.movies.controller.model.movie.MovieListWeb;
+import com.cipfpmislata.movies.controller.model.movie.MovieUpdateWeb;
 import com.cipfpmislata.movies.domain.entity.Character;
 import com.cipfpmislata.movies.domain.entity.Director;
 import com.cipfpmislata.movies.domain.entity.Movie;
@@ -101,6 +103,18 @@ public interface MovieMapper {
     default List<CharacterListWeb> mapCharactersToCharactersListWeb(List<Character> characters){
         return characters.stream()
                 .map(CharacterMapper.mapper::toCharacterListWeb)
+                .toList();
+    }
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "director", expression = "java(mapDirectorListWebToDirector(movieUpdateWeb.getDirectorListWeb()))")
+    @Mapping(target = "characters", expression = "java(mapCharactersUpdateWebToCharacters(movieUpdateWeb.getCharactersUpdateWeb()))")
+    Movie toMovie(MovieUpdateWeb movieUpdateWeb);
+
+    @Named("charactersUpdateWebToCharacters")
+    default List<Character> mapCharactersUpdateWebToCharacters(List<CharacterUpdateWeb> charactersUpdateWeb){
+        return charactersUpdateWeb.stream()
+                .map(CharacterMapper.mapper::toCharacter)
                 .toList();
     }
 }
