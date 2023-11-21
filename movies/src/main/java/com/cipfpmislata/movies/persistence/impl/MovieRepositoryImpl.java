@@ -77,6 +77,24 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
+    public Optional<Movie> findByMovieName(String name){
+        try(Connection connection = DBUtil.open(true)){
+            Optional<MovieEntity> movieEntity = movieDAO.findByName(connection, name);
+            if(movieEntity.isEmpty()){
+                return Optional.empty();
+            }
+            movieEntity.get().getDirectorEntity(connection, directorDAO);
+            List<CharacterEntity> charactersEntities = movieEntity.get().getCharactersEntities(connection, characterDAO);
+            for(CharacterEntity characterEntity : charactersEntities){
+                characterEntity.getActorEntity(connection, actorDAO);
+            }
+            return Optional.of(MovieMapper.mapper.toMovie(movieEntity.get()));
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<Character> getCharacterByMovieId(int id){
         try(Connection connection = DBUtil.open(true)){
             List<CharacterEntity> characterEntities = characterDAO.findByMovieId(connection, id);

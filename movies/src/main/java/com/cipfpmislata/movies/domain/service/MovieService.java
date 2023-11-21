@@ -8,6 +8,7 @@ import java.util.List;
 public interface MovieService {
     List<Movie> getAll(Integer page, Integer page_size);
     Movie findByMovieId(int id);
+    Movie findByMovieName(String name);
     List<Character> getCharacterByMovieId(int id);
     Character findByCharacterId(int id);
     int getTotalNumberOfRecords();

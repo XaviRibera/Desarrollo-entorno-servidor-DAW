@@ -45,6 +45,16 @@ public class MovieDAO {
             throw new RuntimeException();
         }
     }
+
+    public Optional<MovieEntity> findByName(Connection connection, String name) {
+        final String SQL = "SELECT * FROM movies WHERE title = ? LIMIT 1";
+        try {
+            ResultSet resultSet = DBUtil.select(connection, SQL, List.of(name));
+            return Optional.ofNullable(resultSet.next()? MovieMapper.mapper.toMovieEntity(resultSet):null);
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
  
     public int getTotalNumberOfRecords(Connection connection) {
         final String SQL = "SELECT COUNT(*) FROM movies";
@@ -75,7 +85,7 @@ public class MovieDAO {
     }
 
     public void update(Connection connection, MovieEntity movieEntity){
-        final String SQL = "UPDATE movies SET title = ?, year = ?, image = ?, runtime = ?, description = ?, director_id = ?";
+        final String SQL = "UPDATE movies SET title = ?, year = ?, image = ?, runtime = ?, description = ?, director_id = ? WHERE id = ?";
         List<Object> params = new ArrayList<>();
         params.add(movieEntity.getTitle());
         params.add(movieEntity.getYear());
@@ -83,6 +93,7 @@ public class MovieDAO {
         params.add(movieEntity.getRuntime());
         params.add(movieEntity.getDescription());
         params.add(movieEntity.getDirectorEntity().getId());
+        params.add(movieEntity.getId());
         DBUtil.update(connection, SQL, params);
     }
 }

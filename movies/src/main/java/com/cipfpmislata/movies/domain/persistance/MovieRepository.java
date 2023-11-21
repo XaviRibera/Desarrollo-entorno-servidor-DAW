@@ -7,8 +7,10 @@ import com.cipfpmislata.movies.domain.entity.Character;
 import com.cipfpmislata.movies.domain.entity.Movie;
 
 public interface MovieRepository {
+    Object findByMovieName = null;
     public List<Movie> getAll(Integer page, Integer page_size);
     Optional<Movie> findByMovieId(int id);
+    Optional<Movie> findByMovieName(String name);
     List<Character> getCharacterByMovieId(int id);
     Optional<Character> findByCharacterId(int id);
     int getTotalNumberOfRecords();

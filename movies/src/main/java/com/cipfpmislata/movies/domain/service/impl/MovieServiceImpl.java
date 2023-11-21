@@ -30,6 +30,12 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public Movie findByMovieName(String name){
+        Movie movie = movieRepository.findByMovieName(name).orElseThrow(() -> new ResourceNotFoundException("Pelicula no encontrado con el titulo: " + name));
+        return movie;
+    }
+
+    @Override
     public List<Character> getCharacterByMovieId(int id){
          return movieRepository.getCharacterByMovieId(id);
     }

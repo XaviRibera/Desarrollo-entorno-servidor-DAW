@@ -64,8 +64,16 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public Response findById(@PathVariable("id") int id) {
+    public Response findByMovieId(@PathVariable("id") int id) {
         MovieDetailWeb movieDetailWeb = MovieMapper.mapper.toMovieDetailWeb(movieService.findByMovieId(id));
+        return Response.builder()
+                .data(movieDetailWeb)
+                .build();
+    }
+
+    @GetMapping("/search/{name}")
+    public Response findByMovieName(@PathVariable("name") String name){
+        MovieDetailWeb movieDetailWeb = MovieMapper.mapper.toMovieDetailWeb(movieService.findByMovieName(name));
         return Response.builder()
                 .data(movieDetailWeb)
                 .build();
