@@ -30,8 +30,8 @@ import com.cipfpmislata.movies.mapper.DirectorMapper;
 public class DirectorController {
     @Autowired
     private DirectorService directorService;
-    
-    @Value("${LIMIT}") 
+
+    @Value("${LIMIT}")
     private int LIMIT;
 
     @ResponseStatus(HttpStatus.OK)

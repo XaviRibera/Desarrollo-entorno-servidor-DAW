@@ -32,7 +32,7 @@ public class MovieDAO {
             }
             return movieEntities;
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
  
@@ -42,7 +42,7 @@ public class MovieDAO {
             ResultSet resultSet = DBUtil.select(connection, SQL, List.of(id));
             return Optional.ofNullable(resultSet.next()? MovieMapper.mapper.toMovieEntity(resultSet):null);
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
@@ -52,7 +52,7 @@ public class MovieDAO {
             ResultSet resultSet = DBUtil.select(connection, SQL, List.of(name));
             return Optional.ofNullable(resultSet.next()? MovieMapper.mapper.toMovieEntity(resultSet):null);
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
  

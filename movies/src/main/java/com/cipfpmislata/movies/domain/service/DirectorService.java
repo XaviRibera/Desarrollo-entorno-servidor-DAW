@@ -9,6 +9,6 @@ public interface DirectorService {
     Director findByDirectorId(int id);
     int insert(Director director);
     int getTotalNumberOfRecords();
-    public void update(Director director);
-    public void delete(int id);
+    void update(Director director);
+    void delete(int id);
 }
